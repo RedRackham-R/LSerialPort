@@ -7,13 +7,6 @@
 * [下载AAR](https://github.com/lxy409875745/LSerialPort/releases/download/20230425/LSerialPort-debug.aar)
 * [下载demo.apk](https://github.com/lxy409875745/LSerialPort/releases/download/20230425/app-debug.apk)
 
-## 工程开发环境信息
-NDK ：23.1.7779620 <br>
-C++ ：17 <br>
-Android Gradle Plugin ：7.4.1<br>
-Gradle ：7.5 <br>
-Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
-
 ## 接口说明
 <table>
   <tr>
@@ -54,9 +47,7 @@ Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
   </tr>
 </table>
 
-<br><br>
-
-## native接口说明
+## Native接口说明
 ### 以下是jni函数，不推荐直接使用。
 <table>
   <tr>
@@ -91,7 +82,7 @@ Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
   </tr>
 </table>
 
-<br><br>
+<br>
 
 ## 引入AAR
 1. 下载 [AAR包](https://github.com/lxy409875745/LSerialPort/releases/download/20230425/LSerialPort-debug.aar)放入工程内libs目录下
@@ -103,7 +94,7 @@ implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
 ```
 <img width="488" alt="12fde479a9d566889521909bd8f4d10" src="https://user-images.githubusercontent.com/22745782/234187372-ba3ac2b7-2963-48e2-a135-148bba59bd13.png">
 
-<br><br>
+<br>
 
 ## 开始使用（Kotlin）[参考代码](https://github.com/lxy409875745/LSerialPort/blob/master/app/src/main/java/com/lxy/lserialport/MainActivity.kt)
 
@@ -169,7 +160,14 @@ val isOpened:Boolean = LSerialPort.hasOpen("/dev/ttysWK0")
 Log.d("LSerialPort","串口/dev/ttysWK0是否已打开：$isOpened}")
 ```
 
-<br><br>
+<br>
+
+## 工程开发环境信息
+NDK ：23.1.7779620 <br>
+C++ ：17 <br>
+Android Gradle Plugin ：7.4.1<br>
+Gradle ：7.5 <br>
+Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
 
 ## 编译工程生成AAR
 1. 导入工程配置后选择Android Studio 中的build -> Refresh Linked C++ Projects 等待Gradle build完成。
