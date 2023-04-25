@@ -221,6 +221,7 @@ package:mine level:error LSerialPortLog
 
 ### 5. 为什么有时候Refresh Linked C++ Projects以及Rebuild Project后没有AAR文件
 先把app以及LSerialPort目录下的build删除，然后重新Refresh Linked C++ Projects以及Rebuild Project，如果还是没有生成多rebuild几次
+<br>
 <img width="320" alt="cbf363f3ca6e83f9805f5d05fa1b52a" src="https://user-images.githubusercontent.com/22745782/234213655-721a42db-673f-42e7-8de5-f55fd92780b6.png">
 
 <br><br>
