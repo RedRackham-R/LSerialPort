@@ -1,11 +1,16 @@
 # LSerialPort 一个C++实现多线程管理读写串口Android库
 
+* [项目地址] https://github.com/RedRackham-R/LSerialPort)
+
+
 该库采用C++实现异步线程读写串口。上层使用无需过多关心异步线程读写问题。
 <br><br>
-<img width="480" alt="12e2d4e30b495362d7ffaf3a1b63719" src="https://user-images.githubusercontent.com/22745782/234218273-ebb2434b-8bb8-47cc-aa7d-0e37c80894b8.png">
+<img width="480" alt="12e2d4e30b495362d7ffaf3a1b63719" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8962cb0e03b74b6da38d743405cdd77d~tplv-k3u1fbpfcp-watermark.image?">
 
-* [下载AAR](https://github.com/lxy409875745/LSerialPort/releases/download/20230425/LSerialPort-debug.aar)
-* [下载demo.apk](https://github.com/lxy409875745/LSerialPort/releases/download/20230425/app-debug.apk)
+<br><br>
+arm64-v8a、armeabi-v7a
+* [下载AAR](https://github.com/RedRackham-R/LSerialPort/releases/download/20230425/LSerialPort-debug.aar)
+* [下载demo.apk](https://github.com/RedRackham-R/LSerialPort/releases/download/20230425/app-debug.apk) 
 
 ## 接口说明
 <table>
@@ -86,17 +91,18 @@
 
 ## 引入AAR
 1. 下载 [AAR包](https://github.com/lxy409875745/LSerialPort/releases/download/20230425/LSerialPort-debug.aar)放入工程内libs目录下
-<img width="309" alt="d1bd64379531d24b56db04b24a30bc9" src="https://user-images.githubusercontent.com/22745782/234186399-1afc0fec-3040-4123-8f0a-b2c7681880d1.png">
+<img width="309" alt="d1bd64379531d24b56db04b24a30bc9" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b8d78c7ef78c4b19ba95e430adb36d59~tplv-k3u1fbpfcp-watermark.image?">
+
 
 2. 在build.gradle中dependencies内添加引用声明
 ```kotlin
 implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
 ```
-<img width="488" alt="12fde479a9d566889521909bd8f4d10" src="https://user-images.githubusercontent.com/22745782/234187372-ba3ac2b7-2963-48e2-a135-148bba59bd13.png">
+<img width="488" alt="12fde479a9d566889521909bd8f4d10" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d989a028987b4ae08a3af511447d7292~tplv-k3u1fbpfcp-watermark.image?">
 
 <br>
 
-## 开始使用（Kotlin）[参考代码](https://github.com/lxy409875745/LSerialPort/blob/master/app/src/main/java/com/lxy/lserialport/MainActivity.kt)
+## 开始使用（Kotlin）[参考代码](https://github.com/RedRackham-R/LSerialPort/blob/master/app/src/main/java/com/lxy/lserialport/MainActivity.kt)
 
 ### 打开串口
 
@@ -171,13 +177,14 @@ Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
 
 ## 编译工程生成AAR
 1. 导入工程配置后选择Android Studio 中的build -> Refresh Linked C++ Projects 等待Gradle build完成。
-<img width="340" alt="63f048d3450c8e4f3a9e3f12ffdf325" src="https://user-images.githubusercontent.com/22745782/234189635-2e2fc7bb-128c-44d4-baf5-2803c795ed1a.png">
+<img width="340" alt="63f048d3450c8e4f3a9e3f12ffdf325" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9f77cbdfb78648deb638b2387dc2e484~tplv-k3u1fbpfcp-watermark.image?">
+
 
 2. Gradle build完成后选择Rebuild Project 等待Gradle build完成。
-<img width="340" alt="323f9c45804d06a432885f14fbbfb9c" src="https://user-images.githubusercontent.com/22745782/234189711-51d93b77-7efb-41af-9f82-1bb7f28ea9b1.png">
+<img width="340" alt="323f9c45804d06a432885f14fbbfb9c" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e523ff583af84dc698c39cb16e255fe9~tplv-k3u1fbpfcp-watermark.image?">
 
 3. 完成后在LSerialPort/build/outputs/aar/目录下会看到LSerialPort-debug.aar文件
-<img width="340" alt="f8eb60ecd662347259874a816ec7a11" src="https://user-images.githubusercontent.com/22745782/234190094-7f41540d-72bd-4235-ae26-2d3806336782.png">
+<img width="340" alt="f8eb60ecd662347259874a816ec7a11" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ce8a8dda2428475e9ef071b28c1dac03~tplv-k3u1fbpfcp-watermark.image?">
 
 <br><br>
 
@@ -187,44 +194,47 @@ Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
 ```
 package:mine level:error LSerialPortLog
 ```
-<img width="500" alt="2a4f6285874dfb001cb817e97924afc" src="https://user-images.githubusercontent.com/22745782/234192781-087d2a92-083e-450b-985d-e53e96b3f3d2.png">
+<img width="500" alt="2a4f6285874dfb001cb817e97924afc" src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/92ba70b5b2864402a6ef2d1dac39225b~tplv-k3u1fbpfcp-watermark.image?">
 
 ### 2. 新版Studio怎么下载某个版本的NDK or 新版的SDK Manager找不到想要的NDK版本
 首先，打开Studio的Tools -> SDK Manage 
 <br><br>
-<img width="360" alt="a9b279b844028fea09238cca48c5a37" src="https://user-images.githubusercontent.com/22745782/234193677-0312da64-18ee-431a-8940-cc32187fbac3.png">
+<img width="360" alt="a9b279b844028fea09238cca48c5a37" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2cefd64ca7d2474e935327fa9cddca96~tplv-k3u1fbpfcp-watermark.image?">
 
 然后，打开页面后先选择 SDK Tools选项
 <br><br>
-<img width="500" alt="d1fc5f8b0dfeb715c1390a92b00ba4c" src="https://user-images.githubusercontent.com/22745782/234194594-c93ebd96-d989-4437-ba41-826d47d1e5a0.png">
+<img width="500" alt="d1fc5f8b0dfeb715c1390a92b00ba4c" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc096401dff0410ba4ce8f248ccf7c4a~tplv-k3u1fbpfcp-watermark.image?">
 
 最后，勾选Show Package Details选项即可下载想要版本的NDK
 <br><br>
-<img width="500" alt="2f577bfdcdda4fd5b73c2d3eb7f6613" src="https://user-images.githubusercontent.com/22745782/234194982-244de77d-6d7a-4bf9-b425-36a80d69c8a7.png">
+<img width="500" alt="2f577bfdcdda4fd5b73c2d3eb7f6613" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cd1c110081504238bd0d87b4c96e5c37~tplv-k3u1fbpfcp-watermark.image?">
 
 ### 3. 想要打包运行其他架构的包。如x86平台
 打开LSerialPort库的Modele Gradle，在NDK内填写需要的架构，如下图内的x86
 <br><br>
-<img width="450" alt="07c2b43ad86f7ff01ed7dcfbeecd138" src="https://user-images.githubusercontent.com/22745782/234198091-ffc27f97-6042-4eaa-9743-3023473fc04a.png">
+<img width="450" alt="07c2b43ad86f7ff01ed7dcfbeecd138" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c1f0aa9b9caa4ecca73b951980e4d71a~tplv-k3u1fbpfcp-watermark.image?">
 
 然后删除app以及LSerialPort中的build目录
 <br><br>
-<img width="320" alt="cbf363f3ca6e83f9805f5d05fa1b52a" src="https://user-images.githubusercontent.com/22745782/234198321-eb018f27-61df-44e4-afb0-1fa18517c661.png">
+<img width="320" alt="cbf363f3ca6e83f9805f5d05fa1b52a" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5f4b194411464a44998b1c6c28c22d14~tplv-k3u1fbpfcp-watermark.image?">
 
 最后重新编译生成AAR即可
 <br><br>
-<img width="320" alt="cbf1a9173a7a205ca019501facc90ae" src="https://user-images.githubusercontent.com/22745782/234198622-de582a46-5e3d-4b25-b54a-7e83a490806f.png">
+<img width="320" alt="cbf1a9173a7a205ca019501facc90ae" src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/efd6f2131f8f41568afa8484f876eea0~tplv-k3u1fbpfcp-watermark.image?">
 
 ### 4. 想要打包release版本的AAR
-打开studio的Build Variants。app与LSerialPort都改为release后，创建release需要的签名文件并重新打包即可
-<img width="320" alt="da0c9bb910a2cb306095cfdd40447ee" src="https://user-images.githubusercontent.com/22745782/234199873-ca776f27-28d8-4950-a910-8118a6508a4d.png">
+打开studio的Build Variants。app与LSerialPort都改为release后，创建release需要的签名文件并重新打包
+<br>
+<img width="320" alt="da0c9bb910a2cb306095cfdd40447ee" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ebde69799b784f439b0a484439d32f75~tplv-k3u1fbpfcp-watermark.image?">
 
 ### 5. 为什么有时候Refresh Linked C++ Projects以及Rebuild Project后没有AAR文件
 先把app以及LSerialPort目录下的build删除，然后重新Refresh Linked C++ Projects以及Rebuild Project，如果还是没有生成多rebuild几次
 <br>
-<img width="320" alt="cbf363f3ca6e83f9805f5d05fa1b52a" src="https://user-images.githubusercontent.com/22745782/234213655-721a42db-673f-42e7-8de5-f55fd92780b6.png">
-
+<img width="320" alt="cbf363f3ca6e83f9805f5d05fa1b52a" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ce577810dc04c22950541a0171a7d66~tplv-k3u1fbpfcp-watermark.image?">
 <br><br>
+# 结语 
+最近学了点C++，总感觉需要上手撸点东西。正好公司项目有使用串口的场景，但是发现大多数串口库一般都需要使用者自己在上层实现对串口多线程管理读写，有些不方便。在网上发现个优秀的C++底层实现多线程串口读写管理的库[MserialPort] https://github.com/flykule/MserialPort) 
+，遂按照该库的代码思路写了LSerialPort。一方面巩固刚学习学习的C++知识，另一方面是重拾很久没用过的JNI、NDK。
 
 # 特别感谢
 ### [MserialPort](https://github.com/flykule/MserialPort)
