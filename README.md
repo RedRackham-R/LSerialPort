@@ -522,7 +522,7 @@ ReadWriteWorker::~ReadWriteWorker() {
   }
 }
 ```
-## 多串口管理
+## 5.多串口管理
 前面已经封装好对串口操作读写的对象ReadWriteWorker，现在只需要使用一个管理类，对每个串口操作对象进行管理。存储这边我们使用[std::unordered_map](https://zh.cppreference.com/w/cpp/container/unordered_map)以串口地址和串口操作对象作为键值对的形式进行保存，添加，删除等操作，使用[std::unordered_map](https://zh.cppreference.com/w/cpp/container/unordered_map)的好处在于它内部实现结构采用对键值进行哈希保存数据，不做任何排序，能对map中的单一值进行快速访问，符合我们现在的实现功能要求。<br><br>
 下面是多串口管理类LSerialPortManager声明定义<br><br>
 [LSerialPortManager.h](https://github.com/RedRackham-R/LSerialPort/blob/master/LSerialPort/src/main/cpp/include/LSerialPort/LSerialPortManager.h)
