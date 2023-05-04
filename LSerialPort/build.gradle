@@ -29,7 +29,11 @@ android {
         versionCode 20230504
         versionName "20230504"
     }
-
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "LSerialPort-${defaultConfig.versionName}-${variant.name}.aar"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
