@@ -221,7 +221,7 @@ Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
    <img width="340" alt="63f048d3450c8e4f3a9e3f12ffdf325" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9f77cbdfb78648deb638b2387dc2e484~tplv-k3u1fbpfcp-watermark.image?">
 
 
-2. Gradle build完成后选择Rebuild Project 等待Gradle build完成。
+2. Gradle build完成后选择Rebuild Project 等待Gradle build完成。<br>
    <img width="340" alt="323f9c45804d06a432885f14fbbfb9c" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e523ff583af84dc698c39cb16e255fe9~tplv-k3u1fbpfcp-watermark.image?">
 
 3. 完成后在LSerialPort/build/outputs/aar/目录下会看到LSerialPort-debug.aar文件
