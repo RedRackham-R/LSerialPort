@@ -112,7 +112,7 @@ arm64-v8a、armeabi-v7a
 <br>
 
 ## 引入AAR
-1. 下载 [AAR包](https://github.com/RedRackham-R/LSerialPort/releases/download/20230504/LSerialPort-20230504-debug.aar)放入工程内libs目录下
+1. 下载 [AAR包](https://github.com/RedRackham-R/LSerialPort/releases/download/20230504/LSerialPort-20230504-debug.aar)放入工程内libs目录下<br>
    <img width="309" alt="d1bd64379531d24b56db04b24a30bc9" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b8d78c7ef78c4b19ba95e430adb36d59~tplv-k3u1fbpfcp-watermark.image?">
 
 
