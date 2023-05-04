@@ -65,7 +65,6 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         //串口地址Path
         binding.spPath.run {
-
             adapter = ArrayAdapter(
                 this@MainActivity, R.layout.simple_spinner_item, mPathArr
             ).apply {
@@ -129,7 +128,8 @@ class MainActivity : AppCompatActivity() {
                 val stopBits = binding.spStopbits.selectedItem as Int
 
                 //打开串口
-                val result = LSerialPort.openSerialPort(path, baudrate, dataBits, parity, stopBits)
+                val result =
+                    LSerialPort.openSerialPort(path, baudrate, dataBits, parity, stopBits)
                 if (result == 0) {
                     setUIClickbale(false)
                     showLogOnMain("打开串口${path}成功")

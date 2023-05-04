@@ -17,7 +17,7 @@ android {
         consumerProguardFiles "consumer-rules.pro"
         ndk {
             //串口默认"armeabi", "armeabi-v7a"
-            abiFilters "arm64-v8a","armeabi-v7a"
+            abiFilters "arm64-v8a", "armeabi-v7a"
             //
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -26,8 +26,8 @@ android {
                 cppFlags '-std=c++17'
             }
         }
-        versionCode 1
-        versionName "1.0"
+        versionCode 20230504
+        versionName "20230504"
     }
 
     buildTypes {

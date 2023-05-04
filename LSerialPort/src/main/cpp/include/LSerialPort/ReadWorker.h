@@ -1,5 +1,5 @@
-#ifndef LSERIALPORT_READWRITEWORKER_H
-#define LSERIALPORT_READWRITEWORKER_H
+#ifndef LSERIALPORT_READWORKER_H
+#define LSERIALPORT_READWORKER_H
 
 #include <unordered_map>
 #include <jni.h>
@@ -18,7 +18,7 @@ namespace LSerialPort {
     /**
      * 读写串口封装类 ReadWriteWorker
      */
-    class ReadWriteWorker : public IWorker {
+    class ReadWorker : public IWorker {
 
     public:
         /**
@@ -31,7 +31,7 @@ namespace LSerialPort {
          * @param readIntervalTimeoutMills CPPLinuxSerial 读串口超时时间  单位：ms
          * @param checkIntervalWaitMills 检查是否有数据循环间隔等待时间 单位：ms
          */
-        ReadWriteWorker(
+        ReadWorker(
                 const std::string &path,
                 BaudRate &baudRate,
                 NumDataBits &dataBits,
@@ -40,13 +40,15 @@ namespace LSerialPort {
                 int32_t &readIntervalTimeoutMills,
                 long &checkIntervalWaitMills);
 
-        ~ReadWriteWorker() override;
+        ~ReadWorker() override;
 
         /**
-         * 发送消息函数
-         * @param msg 二进制消息
+         * 只读无需发送消息，这里直接空实现函数
+         * @param msg
          */
-        void doWork(const std::vector<uint8_t> &msg) override;
+        void doWork(const std::vector<uint8_t> &msg) override {
+
+        }
 
         /**
          * 退出任务
@@ -78,8 +80,6 @@ namespace LSerialPort {
         SerialPort *_serialPort = nullptr;
         //读线程
         std::thread *_readThread = nullptr;
-        //写线程
-        std::thread *_writeThread = nullptr;
         //检查数据是否可见
         std::thread *_checkAvaliableThread = nullptr;
         //当前消息回调
@@ -92,8 +92,6 @@ namespace LSerialPort {
         std::mutex _mMsgMutex;
         //监听器锁
         std::mutex _mListenerMutex;
-        //消息队列
-        std::queue<std::vector<uint8_t>> _mMsgQueue;
         //消息通知
         std::condition_variable _mMsgCond;
         //读取缓存是否有数据
@@ -101,11 +99,6 @@ namespace LSerialPort {
         //检查是否有数据等待时间
         long _checkIntervalWaitMills;
 
-
-        /**
-         * 写循环
-         */
-        void writeLoop();
 
         /**
          * 读循环
@@ -121,4 +114,4 @@ namespace LSerialPort {
 }
 
 
-#endif //LSERIALPORT_READWRITEWORKER_H
+#endif //LSERIALPORT_READWORKER_H

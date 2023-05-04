@@ -1,13 +1,11 @@
-#include <utility>
-#include "include/LSerialPort/ReadWriteWorker.h"
-#include "iostream"
+#include "include/LSerialPort/ReadWorker.h"
 #include "include/Android/AndroidLog.h"
-#include "include/CppLinuxSerial/SerialPort.h"
 #include "include/LSerialPort/LSerialPortManager.h"
+
 
 namespace LSerialPort {
 
-    ReadWriteWorker::ReadWriteWorker(
+    ReadWorker::ReadWorker(
             const std::string &path,
             BaudRate &baudRate,
             NumDataBits &dataBits,
@@ -25,12 +23,10 @@ namespace LSerialPort {
             char *path_char = strcpy(ch, path.c_str());
             LOGE("serial port [%s] open success ! ", path_char);
             _checkIntervalWaitMills = checkIntervalWaitMills;
-            //写线程
-            _writeThread = new std::thread(&ReadWriteWorker::writeLoop, this);
             //读线程
-            _readThread = new std::thread(&ReadWriteWorker::readLoop, this);
+            _readThread = new std::thread(&ReadWorker::readLoop, this);
             //检查读数据线程
-            _checkAvaliableThread = new std::thread(&ReadWriteWorker::checkAvailableLoop, this);
+            _checkAvaliableThread = new std::thread(&ReadWorker::checkAvailableLoop, this);
 
         } else {
             LOGE("serial port open fail!");
@@ -40,15 +36,7 @@ namespace LSerialPort {
         }
     }
 
-
-    void ReadWriteWorker::doWork(const std::vector<uint8_t> &msg) {
-        std::lock_guard<std::mutex> lk(_mMsgMutex);
-        _mMsgQueue.push(msg);
-        _mMsgCond.notify_all();
-    }
-
-
-    void ReadWriteWorker::checkAvailableLoop() {
+    void ReadWorker::checkAvailableLoop() {
         LOGE("start check available Loop");
         while (!isInterrupted()) {
             if (_serialPort->GetState() == State::OPEN && _serialPort->Available() > 0) {
@@ -62,7 +50,7 @@ namespace LSerialPort {
     }
 
 
-    void ReadWriteWorker::readLoop() {
+    void ReadWorker::readLoop() {
         LOGE("start read loop");
         // 等待直至收到发送数据
         std::unique_lock<std::mutex> lk(_mMsgMutex);
@@ -118,31 +106,13 @@ namespace LSerialPort {
         LOGE("read loop is interrupted!");
     }
 
-    //写循环
-    void ReadWriteWorker::writeLoop() {
-        // 等待直至 main() 发送数据
-        std::unique_lock<std::mutex> lk(_mMsgMutex);
-        LOGE("start write loop");
-        while (!isInterrupted()) {
-            //这里等待需要传入当前对象指针，传this会复制当前对象指针而&只会获得当前对象指针引用，
-            //如果在lambda表达式中修改了this内容会使得修改无效，一般建议用地址符&
-            _mMsgCond.wait(lk, [&] { return (isInterrupted() || !_mMsgQueue.empty()); });
-            if (isInterrupted()) {
-                break;
-            }
-            std::vector<uint8_t> msg = std::move(_mMsgQueue.front());
-            _serialPort->WriteBinary(msg);
-            _mMsgQueue.pop();
-        }
-        LOGE("write loop is interrupted!");
-    }
 
-    bool ReadWriteWorker::isOpened() {
+    bool ReadWorker::isOpened() {
         return (_serialPort != nullptr && _serialPort->GetState() == State::OPEN);
     }
 
 
-    void ReadWriteWorker::setLSerialPortDataListener(
+    void ReadWorker::setLSerialPortDataListener(
             jobject *listener) {
         //设置监听器锁，避免操作回调时因为设置监听器而出问题
         std::lock_guard<std::mutex> llk(_mListenerMutex);
@@ -150,34 +120,24 @@ namespace LSerialPort {
     }
 
 
-    ReadWriteWorker::~ReadWriteWorker() {
+    ReadWorker::~ReadWorker() {
         LOGE("---finishing worker---");
-        ReadWriteWorker::interrupte();
+        ReadWorker::interrupte();
         LOGE("wait for checkAvaliable thread end");
         if ((_checkAvaliableThread != nullptr) && _checkAvaliableThread->joinable()) {
             _checkAvaliableThread->join();//等待检查线程结束
         }
-        LOGE("wait for write thread end");
-        if ((_writeThread != nullptr) && _writeThread->joinable()) {
-            _writeThread->join();//等待写线程结束
-        }
+
         LOGE("wait for read thread end");
         if ((_readThread != nullptr) && _readThread->joinable()) {
             _readThread->join();//等待读线程结束
         }
 
-        LOGE("cleaning msgQueue");
-        // 清空队列
-        while (!_mMsgQueue.empty()) {
-            _mMsgQueue.pop();
-        }
-        LOGE("cleaning thread ptr");
 
+        LOGE("cleaning thread ptr");
         delete _checkAvaliableThread;
-        delete _writeThread;
         delete _readThread;
         _checkAvaliableThread = nullptr;
-        _writeThread = nullptr;
         _readThread = nullptr;
 
         LOGE("cleaning listener ptr");
@@ -191,7 +151,6 @@ namespace LSerialPort {
             _curlistener = nullptr;
         }
 
-
         LOGE("close SerialPort");
         if (_serialPort != nullptr) {
             LOGE("closing...");
@@ -203,9 +162,4 @@ namespace LSerialPort {
         LOGE("finish done!");
     }
 
-
 }
-
-
-
-

@@ -41,6 +41,46 @@ namespace LSerialPort {
                 long &checkIntervalWaitMills);
 
         /**
+         * 添加只写设备
+         * @param path
+         * @param baudRate
+         * @param dataBits
+         * @param parity
+         * @param stopBits
+         * @param readIntervalTimeoutMills
+         * @return
+         */
+        int addWriteOnlyDevice(
+                std::string &path,
+                BaudRate &baudRate,
+                NumDataBits &dataBits,
+                Parity &parity,
+                NumStopBits &stopBits,
+                int32_t &readIntervalTimeoutMills
+        );
+
+        /**
+         * 添加只读设备
+         * @param path 串口地址
+         * @param baudRate 波特率
+         * @param dataBits 数据位
+         * @param parity 校验位
+         * @param stopBits 停止位
+         * @param readIntervalTimeoutMills 循环读SerialPort超时时间，超过时间就继续下一次轮循
+         * @param checkIntervalWaitMills 循环检查等待时间，如果想要回复多一些数据可以适当延长
+         * @return
+         */
+        int addReadOnlyDevice(
+                std::string &path,
+                BaudRate &baudRate,
+                NumDataBits &dataBits,
+                Parity &parity,
+                NumStopBits &stopBits,
+                int32_t &readIntervalTimeoutMills,
+                long &checkIntervalWaitMills);
+
+
+        /**
          * 删除设备
          * @param path 串口地址
          * @return
@@ -73,7 +113,7 @@ namespace LSerialPort {
 
     private:
         //已加载的串口设备
-        std::unordered_map<std::string, std::unique_ptr<ReadWriteWorker>> _mDevices;
+        std::unordered_map<std::string, std::unique_ptr<IWorker>> _mDevices;
     };
 }
 

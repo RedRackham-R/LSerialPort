@@ -17,6 +17,44 @@ object LSerialPort {
 
 
     @JvmOverloads
+    fun openSerialPortReadOnly(
+        path: String,
+        @BaudRate baudrate: Int,
+        @DataBits dataBits: Int = DEF_DATABITS,
+        @Parity parity: Int = DEF_PARITY,
+        @StopBits stopBits: Int = DEF_STOPBITS,
+        checkIntervalWaitMills: Long = DEF_CHECK_INTERVAL_WAIT_MILLS
+    ): Int {
+        return native_openSerialPortReadOnly(
+            path,
+            baudrate,
+            dataBits,
+            parity,
+            stopBits,
+            checkIntervalWaitMills
+        )
+    }
+
+
+    @JvmOverloads
+    fun openSerialPortWriteOnly(
+        path: String,
+        @BaudRate baudrate: Int,
+        @DataBits dataBits: Int = DEF_DATABITS,
+        @Parity parity: Int = DEF_PARITY,
+        @StopBits stopBits: Int = DEF_STOPBITS,
+    ): Int {
+        return native_openSerialPortWriteOnly(
+            path,
+            baudrate,
+            dataBits,
+            parity,
+            stopBits
+        )
+    }
+
+
+    @JvmOverloads
     fun openSerialPort(
         path: String,
         @BaudRate baudrate: Int,
@@ -70,6 +108,25 @@ object LSerialPort {
         stopBits: Int,
         checkIntervalWaitMills: Long
     ): Int
+
+
+    external fun native_openSerialPortWriteOnly(
+        path: String,
+        baudrate: Int,
+        dataBits: Int,
+        parity: Int,
+        stopBits: Int,
+    ): Int
+
+    external fun native_openSerialPortReadOnly(
+        path: String,
+        baudrate: Int,
+        dataBits: Int,
+        parity: Int,
+        stopBits: Int,
+        checkIntervalWaitMills: Long
+    ): Int
+
 
     external fun native_closeSerialPort(
         path: String,

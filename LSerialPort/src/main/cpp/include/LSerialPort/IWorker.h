@@ -16,9 +16,7 @@ namespace LSerialPort {
         IWorker() : _interruptedFuture(_interruptSignal.get_future()) {
         }
 
-        ~IWorker() {
-
-        }
+        virtual ~IWorker() = default;
 
         //发送消息
         virtual void doWork(const std::vector<uint8_t> &msg) = 0;
