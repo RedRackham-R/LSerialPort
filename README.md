@@ -6,11 +6,8 @@
 该库采用C++实现异步线程读写串口。上层使用无需过多关心异步线程读写问题。
 <br><br>
 <img width="480" alt="12e2d4e30b495362d7ffaf3a1b63719" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8962cb0e03b74b6da38d743405cdd77d~tplv-k3u1fbpfcp-watermark.image?">
-
 <br><br>
-arm64-v8a、armeabi-v7a
-* [下载AAR](https://github.com/RedRackham-R/LSerialPort/releases/download/20230504/LSerialPort-20230504-debug.aar)
-* [下载demo.apk](https://github.com/RedRackham-R/LSerialPort/releases/download/20230504/app-debug.apk)
+* [下载AAR以及demo](https://github.com/RedRackham-R/LSerialPort/releases)（平台：arm64-v8a、armeabi-v7a）
 
 ## 接口说明
 <table>
@@ -112,7 +109,7 @@ arm64-v8a、armeabi-v7a
 <br>
 
 ## 引入AAR
-1. 下载 [AAR包](https://github.com/RedRackham-R/LSerialPort/releases/download/20230504/LSerialPort-20230504-debug.aar)放入工程内libs目录下<br>
+1. 下载 [AAR包](https://github.com/RedRackham-R/LSerialPort/releases)放入工程内libs目录下<br>
    <img width="309" alt="d1bd64379531d24b56db04b24a30bc9" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b8d78c7ef78c4b19ba95e430adb36d59~tplv-k3u1fbpfcp-watermark.image?">
 
 
@@ -135,11 +132,11 @@ val result = LSerialPort.openSerialPort(path = "/dev/ttysWK0",baudrate =  BaudRa
 //当然也可以分别定制数据位，校验位，停止位。
 //默认数据位：8，校验位：无，停止位：1
 val result = LSerialPort.openSerialPort(
-    path = "/dev/ttysWK0", //串口地址
-    baudrate = BaudRate.B_9600,//波特率
-    dataBits = DataBits.EIGHT,//数据位
-    parity = Parity.NONE,//校验位
-    stopBits = StopBits.ONE//停止位
+   path = "/dev/ttysWK0", //串口地址
+   baudrate = BaudRate.B_9600,//波特率
+   dataBits = DataBits.EIGHT,//数据位
+   parity = Parity.NONE,//校验位
+   stopBits = StopBits.ONE//停止位
 )
 
 
@@ -147,28 +144,28 @@ val result = LSerialPort.openSerialPort(
 //该函数是线程循环检查串口是否有数据并通知回传的等待时间，设置等待时间越长，数据返回量越大，当然数据回调的间隔也会越久，酌情配置。
 //默认等待时间：0 单位：毫秒
 val result = LSerialPort.openSerialPort(
-    path = "/dev/ttysWK0",
-    baudrate = BaudRate.B_9600,
-    checkIntervalWaitMills = 10//设置等待时间10ms 
+   path = "/dev/ttysWK0",
+   baudrate = BaudRate.B_9600,
+   checkIntervalWaitMills = 10//设置等待时间10ms 
 )
 
 //只读方式打开串口
 val result = LSerialPort.openSerialPortReadOnly(
-    path = "/dev/ttysWK0", //串口地址
-    baudrate = BaudRate.B_9600,//波特率
-    dataBits = DataBits.EIGHT,//数据位
-    parity = Parity.NONE,//校验位
-    stopBits = StopBits.ONE//停止位
+   path = "/dev/ttysWK0", //串口地址
+   baudrate = BaudRate.B_9600,//波特率
+   dataBits = DataBits.EIGHT,//数据位
+   parity = Parity.NONE,//校验位
+   stopBits = StopBits.ONE//停止位
 )
 
 //只写方式打开串口
 val result = LSerialPort.openSerialPortWriteOnly(
-    path = "/dev/ttysWK0", //串口地址
-    baudrate = BaudRate.B_9600,//波特率
-    dataBits = DataBits.EIGHT,//数据位
-    parity = Parity.NONE,//校验位
-    stopBits = StopBits.ONE,//停止位
-    checkIntervalWaitMills =0//设置等待时间0ms
+   path = "/dev/ttysWK0", //串口地址
+   baudrate = BaudRate.B_9600,//波特率
+   dataBits = DataBits.EIGHT,//数据位
+   parity = Parity.NONE,//校验位
+   stopBits = StopBits.ONE,//停止位
+   checkIntervalWaitMills =0//设置等待时间0ms
 )
 ```
 
@@ -180,8 +177,8 @@ val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
 
 //可以在子线程内发送数据，发送线程以及队列由C++部分维护，无需关心线程同步问题
 Thread{
-    val msg = byteArrayOf(0xFF.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0xFE.toByte())
-    val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
+   val msg = byteArrayOf(0xFF.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0xFE.toByte())
+   val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
 }.start()
 ```
 
@@ -190,7 +187,7 @@ Thread{
 //打开串口后设置监听器 返回数据为byteArray
 //注意！ 如果进行多次设置，每次会覆盖掉前一个监听器。
 val result = LSerialPort.setOnLSerialPortListener("/dev/ttysWK0") { msg ->
-    Log.d("LSerialPort","接收到数据长度：${msg.size}")
+   Log.d("LSerialPort","接收到数据长度：${msg.size}")
 }
 ```
 
