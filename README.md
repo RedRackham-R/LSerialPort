@@ -155,7 +155,9 @@ val result = LSerialPort.openSerialPortReadOnly(
    baudrate = BaudRate.B_9600,//波特率
    dataBits = DataBits.EIGHT,//数据位
    parity = Parity.NONE,//校验位
-   stopBits = StopBits.ONE//停止位
+   stopBits = StopBits.ONE,//停止位
+   checkIntervalWaitMills =0//设置等待时间0ms
+
 )
 
 //只写方式打开串口
@@ -164,8 +166,7 @@ val result = LSerialPort.openSerialPortWriteOnly(
    baudrate = BaudRate.B_9600,//波特率
    dataBits = DataBits.EIGHT,//数据位
    parity = Parity.NONE,//校验位
-   stopBits = StopBits.ONE,//停止位
-   checkIntervalWaitMills =0//设置等待时间0ms
+   stopBits = StopBits.ONE//停止位
 )
 ```
 
