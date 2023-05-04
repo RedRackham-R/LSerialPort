@@ -119,7 +119,7 @@ implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
 ```
 <img width="488" alt="12fde479a9d566889521909bd8f4d10" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d989a028987b4ae08a3af511447d7292~tplv-k3u1fbpfcp-watermark.image?">
 
-<br>
+<br><br>
 
 ## 开始使用（Kotlin）[参考代码](https://github.com/RedRackham-R/LSerialPort/blob/master/app/src/main/java/com/lxy/lserialport/MainActivity.kt)
 
@@ -132,11 +132,11 @@ val result = LSerialPort.openSerialPort(path = "/dev/ttysWK0",baudrate =  BaudRa
 //当然也可以分别定制数据位，校验位，停止位。
 //默认数据位：8，校验位：无，停止位：1
 val result = LSerialPort.openSerialPort(
-   path = "/dev/ttysWK0", //串口地址
-   baudrate = BaudRate.B_9600,//波特率
-   dataBits = DataBits.EIGHT,//数据位
-   parity = Parity.NONE,//校验位
-   stopBits = StopBits.ONE//停止位
+    path = "/dev/ttysWK0", //串口地址
+    baudrate = BaudRate.B_9600,//波特率
+    dataBits = DataBits.EIGHT,//数据位
+    parity = Parity.NONE,//校验位
+    stopBits = StopBits.ONE//停止位
 )
 
 
@@ -144,29 +144,28 @@ val result = LSerialPort.openSerialPort(
 //该函数是线程循环检查串口是否有数据并通知回传的等待时间，设置等待时间越长，数据返回量越大，当然数据回调的间隔也会越久，酌情配置。
 //默认等待时间：0 单位：毫秒
 val result = LSerialPort.openSerialPort(
-   path = "/dev/ttysWK0",
-   baudrate = BaudRate.B_9600,
-   checkIntervalWaitMills = 10//设置等待时间10ms 
+    path = "/dev/ttysWK0",
+    baudrate = BaudRate.B_9600,
+    checkIntervalWaitMills = 10//设置等待时间10ms 
 )
 
 //只读方式打开串口
 val result = LSerialPort.openSerialPortReadOnly(
-   path = "/dev/ttysWK0", //串口地址
-   baudrate = BaudRate.B_9600,//波特率
-   dataBits = DataBits.EIGHT,//数据位
-   parity = Parity.NONE,//校验位
-   stopBits = StopBits.ONE,//停止位
-   checkIntervalWaitMills =0//设置等待时间0ms
-
+    path = "/dev/ttysWK0", //串口地址
+    baudrate = BaudRate.B_9600,//波特率
+    dataBits = DataBits.EIGHT,//数据位
+    parity = Parity.NONE,//校验位
+    stopBits = StopBits.ONE,//停止位
+    checkIntervalWaitMills =0//设置等待时间0ms
 )
 
 //只写方式打开串口
 val result = LSerialPort.openSerialPortWriteOnly(
-   path = "/dev/ttysWK0", //串口地址
-   baudrate = BaudRate.B_9600,//波特率
-   dataBits = DataBits.EIGHT,//数据位
-   parity = Parity.NONE,//校验位
-   stopBits = StopBits.ONE//停止位
+    path = "/dev/ttysWK0", //串口地址
+    baudrate = BaudRate.B_9600,//波特率
+    dataBits = DataBits.EIGHT,//数据位
+    parity = Parity.NONE,//校验位
+    stopBits = StopBits.ONE//停止位
 )
 ```
 
@@ -178,8 +177,8 @@ val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
 
 //可以在子线程内发送数据，发送线程以及队列由C++部分维护，无需关心线程同步问题
 Thread{
-   val msg = byteArrayOf(0xFF.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0xFE.toByte())
-   val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
+    val msg = byteArrayOf(0xFF.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0xFE.toByte())
+    val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
 }.start()
 ```
 
@@ -188,7 +187,7 @@ Thread{
 //打开串口后设置监听器 返回数据为byteArray
 //注意！ 如果进行多次设置，每次会覆盖掉前一个监听器。
 val result = LSerialPort.setOnLSerialPortListener("/dev/ttysWK0") { msg ->
-   Log.d("LSerialPort","接收到数据长度：${msg.size}")
+    Log.d("LSerialPort","接收到数据长度：${msg.size}")
 }
 ```
 
@@ -205,6 +204,89 @@ val isOpened:Boolean = LSerialPort.hasOpen("/dev/ttysWK0")
 Log.d("LSerialPort","串口/dev/ttysWK0是否已打开：$isOpened}")
 ```
 
+<br><br>
+
+## 开始使用（Java）
+
+### 打开串口
+
+```Java
+//打开串口/dev/ttysWK0,波特率为9600
+int result = LSerialPort.INSTANCE.openSerialPort("/dev/ttysWK0", BaudRate.B_9600);
+
+//当然也可以分别定制数据位，校验位，停止位。
+//默认数据位：8，校验位：无，停止位：1
+int result = LSerialPort.INSTANCE.openSerialPort(
+        "/dev/ttysWK0", //串口地址
+        BaudRate.B_9600,//波特率
+        DataBits.EIGHT,//数据位
+        Parity.NONE,//校验位
+        StopBits.ONE//停止位
+);
+
+//如果需要一次返回尽量多一些数据。可以设置checkIntervalWaitMills参数。
+//该函数是线程循环检查串口是否有数据并通知回传的等待时间，设置等待时间越长，数据返回量越大，当然数据回调的间隔也会越久，酌情配置。
+//默认等待时间：0 单位：毫秒
+int result = LSerialPort.INSTANCE.openSerialPort(
+        "/dev/ttysWK0", //串口地址
+        BaudRate.B_9600,//波特率
+        DataBits.EIGHT,//数据位
+        Parity.NONE,//校验位
+        StopBits.ONE,//停止位
+        10L//设置等待时间10ms
+);
+
+//只读方式打开串口
+int result = LSerialPort.INSTANCE.openSerialPortReadOnly(
+        "/dev/ttysWK0", //串口地址
+        BaudRate.B_9600,//波特率
+        DataBits.EIGHT,//数据位
+        Parity.NONE,//校验位
+        StopBits.ONE,//停止位
+        10L//设置等待时间10ms
+);
+
+//只写方式打开串口
+int result = LSerialPort.INSTANCE.openSerialPortWriteOnly(
+        "/dev/ttysWK0", //串口地址
+        BaudRate.B_9600,//波特率
+        DataBits.EIGHT,//数据位
+        Parity.NONE,//校验位
+        StopBits.ONE//停止位
+);
+```
+### 发送一条数据
+```Java
+//打开串口后发送数据
+byte[] msg = new byte[]{(byte) 0xFF, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05, (byte) 0xFE};
+int result = LSerialPort.INSTANCE.sendMsg("/dev/ttysWK0", msg);
+
+//可以在子线程内发送数据，发送线程以及队列由C++部分维护，无需关心线程同步问题
+new Thread(() -> {
+    byte[] msg = new byte[]{(byte) 0xFF, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0xFE};
+    int result = LSerialPort.INSTANCE.sendMsg("/dev/ttysWK0", msg);
+}).start();
+```
+### 设置监听器
+```Java
+//打开串口后设置监听器 返回数据为byteArray
+//注意！ 如果进行多次设置，每次会覆盖掉前一个监听器。
+int result = LSerialPort.INSTANCE.setOnLSerialPortListener("/dev/ttysWK0", data -> {
+    Log.d("LSerialPort", "接收到数据长度：" + data.length);
+});
+```
+### 关闭串口
+```Java
+//调用时该函数会阻塞等待C++线程退出，需要一定耗时
+int result = LSerialPort.INSTANCE.closeSerialPort("/dev/ttysWK0");
+```
+
+### 判断串口是否已经打开
+```Java
+//使用该函数判断串口是否已经打开
+boolean isOpened = LSerialPort.INSTANCE.hasOpen("/dev/ttysWK0");
+Log.d("LSerialPort", "串口/dev/ttysWK0是否已打开：" + isOpened);
+```
 <br>
 
 ## 工程开发环境信息
@@ -215,17 +297,17 @@ Gradle ：7.5 <br>
 Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
 
 ## 编译工程生成AAR
-1. 导入工程配置后选择Android Studio 中的build -> Refresh Linked C++ Projects 等待Gradle build完成。
+1. 导入工程配置后选择Android Studio 中的build -> Refresh Linked C++ Projects 等待Gradle build完成。<br>
    <img width="340" alt="63f048d3450c8e4f3a9e3f12ffdf325" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9f77cbdfb78648deb638b2387dc2e484~tplv-k3u1fbpfcp-watermark.image?">
 
 
 2. Gradle build完成后选择Rebuild Project 等待Gradle build完成。<br>
    <img width="340" alt="323f9c45804d06a432885f14fbbfb9c" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e523ff583af84dc698c39cb16e255fe9~tplv-k3u1fbpfcp-watermark.image?">
 
-3. 完成后在LSerialPort/build/outputs/aar/目录下会看到LSerialPort-debug.aar文件
+3. 完成后在LSerialPort/build/outputs/aar/目录下会看到LSerialPort-debug.aar文件<br>
    <img width="340" alt="f8eb60ecd662347259874a816ec7a11" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ce8a8dda2428475e9ef071b28c1dac03~tplv-k3u1fbpfcp-watermark.image?">
 
-<br><br>
+<br>
 
 ## 可能会遇到的问题
 ### 1. 调用函数是返回-1失败，我该如何查看是什么问题
