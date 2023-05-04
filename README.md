@@ -132,11 +132,11 @@ val result = LSerialPort.openSerialPort(path = "/dev/ttysWK0",baudrate =  BaudRa
 //当然也可以分别定制数据位，校验位，停止位。
 //默认数据位：8，校验位：无，停止位：1
 val result = LSerialPort.openSerialPort(
-    path = "/dev/ttysWK0", //串口地址
-    baudrate = BaudRate.B_9600,//波特率
-    dataBits = DataBits.EIGHT,//数据位
-    parity = Parity.NONE,//校验位
-    stopBits = StopBits.ONE//停止位
+   path = "/dev/ttysWK0", //串口地址
+   baudrate = BaudRate.B_9600,//波特率
+   dataBits = DataBits.EIGHT,//数据位
+   parity = Parity.NONE,//校验位
+   stopBits = StopBits.ONE//停止位
 )
 
 
@@ -144,28 +144,28 @@ val result = LSerialPort.openSerialPort(
 //该函数是线程循环检查串口是否有数据并通知回传的等待时间，设置等待时间越长，数据返回量越大，当然数据回调的间隔也会越久，酌情配置。
 //默认等待时间：0 单位：毫秒
 val result = LSerialPort.openSerialPort(
-    path = "/dev/ttysWK0",
-    baudrate = BaudRate.B_9600,
-    checkIntervalWaitMills = 10//设置等待时间10ms 
+   path = "/dev/ttysWK0",
+   baudrate = BaudRate.B_9600,
+   checkIntervalWaitMills = 10//设置等待时间10ms 
 )
 
 //只读方式打开串口
 val result = LSerialPort.openSerialPortReadOnly(
-    path = "/dev/ttysWK0", //串口地址
-    baudrate = BaudRate.B_9600,//波特率
-    dataBits = DataBits.EIGHT,//数据位
-    parity = Parity.NONE,//校验位
-    stopBits = StopBits.ONE,//停止位
-    checkIntervalWaitMills =0//设置等待时间0ms
+   path = "/dev/ttysWK0", //串口地址
+   baudrate = BaudRate.B_9600,//波特率
+   dataBits = DataBits.EIGHT,//数据位
+   parity = Parity.NONE,//校验位
+   stopBits = StopBits.ONE,//停止位
+   checkIntervalWaitMills =0//设置等待时间0ms
 )
 
 //只写方式打开串口
 val result = LSerialPort.openSerialPortWriteOnly(
-    path = "/dev/ttysWK0", //串口地址
-    baudrate = BaudRate.B_9600,//波特率
-    dataBits = DataBits.EIGHT,//数据位
-    parity = Parity.NONE,//校验位
-    stopBits = StopBits.ONE//停止位
+   path = "/dev/ttysWK0", //串口地址
+   baudrate = BaudRate.B_9600,//波特率
+   dataBits = DataBits.EIGHT,//数据位
+   parity = Parity.NONE,//校验位
+   stopBits = StopBits.ONE//停止位
 )
 ```
 
@@ -177,8 +177,8 @@ val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
 
 //可以在子线程内发送数据，发送线程以及队列由C++部分维护，无需关心线程同步问题
 Thread{
-    val msg = byteArrayOf(0xFF.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0xFE.toByte())
-    val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
+   val msg = byteArrayOf(0xFF.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0xFE.toByte())
+   val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
 }.start()
 ```
 
@@ -187,7 +187,7 @@ Thread{
 //打开串口后设置监听器 返回数据为byteArray
 //注意！ 如果进行多次设置，每次会覆盖掉前一个监听器。
 val result = LSerialPort.setOnLSerialPortListener("/dev/ttysWK0") { msg ->
-    Log.d("LSerialPort","接收到数据长度：${msg.size}")
+   Log.d("LSerialPort","接收到数据长度：${msg.size}")
 }
 ```
 
@@ -216,64 +216,64 @@ int result = LSerialPort.INSTANCE.openSerialPort("/dev/ttysWK0", BaudRate.B_9600
 
 //当然也可以分别定制数据位，校验位，停止位。
 //默认数据位：8，校验位：无，停止位：1
-int result = LSerialPort.INSTANCE.openSerialPort(
+        int result = LSerialPort.INSTANCE.openSerialPort(
         "/dev/ttysWK0", //串口地址
         BaudRate.B_9600,//波特率
         DataBits.EIGHT,//数据位
         Parity.NONE,//校验位
         StopBits.ONE//停止位
-);
+        );
 
 //如果需要一次返回尽量多一些数据。可以设置checkIntervalWaitMills参数。
 //该函数是线程循环检查串口是否有数据并通知回传的等待时间，设置等待时间越长，数据返回量越大，当然数据回调的间隔也会越久，酌情配置。
 //默认等待时间：0 单位：毫秒
-int result = LSerialPort.INSTANCE.openSerialPort(
+        int result = LSerialPort.INSTANCE.openSerialPort(
         "/dev/ttysWK0", //串口地址
         BaudRate.B_9600,//波特率
         DataBits.EIGHT,//数据位
         Parity.NONE,//校验位
         StopBits.ONE,//停止位
         10L//设置等待时间10ms
-);
+        );
 
 //只读方式打开串口
-int result = LSerialPort.INSTANCE.openSerialPortReadOnly(
+        int result = LSerialPort.INSTANCE.openSerialPortReadOnly(
         "/dev/ttysWK0", //串口地址
         BaudRate.B_9600,//波特率
         DataBits.EIGHT,//数据位
         Parity.NONE,//校验位
         StopBits.ONE,//停止位
         10L//设置等待时间10ms
-);
+        );
 
 //只写方式打开串口
-int result = LSerialPort.INSTANCE.openSerialPortWriteOnly(
+        int result = LSerialPort.INSTANCE.openSerialPortWriteOnly(
         "/dev/ttysWK0", //串口地址
         BaudRate.B_9600,//波特率
         DataBits.EIGHT,//数据位
         Parity.NONE,//校验位
         StopBits.ONE//停止位
-);
+        );
 ```
 ### 发送一条数据
 ```Java
 //打开串口后发送数据
 byte[] msg = new byte[]{(byte) 0xFF, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05, (byte) 0xFE};
-int result = LSerialPort.INSTANCE.sendMsg("/dev/ttysWK0", msg);
+        int result = LSerialPort.INSTANCE.sendMsg("/dev/ttysWK0", msg);
 
 //可以在子线程内发送数据，发送线程以及队列由C++部分维护，无需关心线程同步问题
-new Thread(() -> {
-    byte[] msg = new byte[]{(byte) 0xFF, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0xFE};
-    int result = LSerialPort.INSTANCE.sendMsg("/dev/ttysWK0", msg);
-}).start();
+        new Thread(() -> {
+        byte[] msg = new byte[]{(byte) 0xFF, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0xFE};
+        int result = LSerialPort.INSTANCE.sendMsg("/dev/ttysWK0", msg);
+        }).start();
 ```
 ### 设置监听器
 ```Java
 //打开串口后设置监听器 返回数据为byteArray
 //注意！ 如果进行多次设置，每次会覆盖掉前一个监听器。
 int result = LSerialPort.INSTANCE.setOnLSerialPortListener("/dev/ttysWK0", data -> {
-    Log.d("LSerialPort", "接收到数据长度：" + data.length);
-});
+        Log.d("LSerialPort", "接收到数据长度：" + data.length);
+        });
 ```
 ### 关闭串口
 ```Java
@@ -285,7 +285,7 @@ int result = LSerialPort.INSTANCE.closeSerialPort("/dev/ttysWK0");
 ```Java
 //使用该函数判断串口是否已经打开
 boolean isOpened = LSerialPort.INSTANCE.hasOpen("/dev/ttysWK0");
-Log.d("LSerialPort", "串口/dev/ttysWK0是否已打开：" + isOpened);
+        Log.d("LSerialPort", "串口/dev/ttysWK0是否已打开：" + isOpened);
 ```
 <br>
 
@@ -354,15 +354,16 @@ package:mine level:error LSerialPortLog
 <img width="320" alt="cbf363f3ca6e83f9805f5d05fa1b52a" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ce577810dc04c22950541a0171a7d66~tplv-k3u1fbpfcp-watermark.image?">
 <br>
 # LSerialPort设计思路
-首先，我们这里对串口设计三个线程任务，分别处理对串口进行读，写，以及检查数据并通知唤醒读线程进行数据读取。这里多一个检查通知线程的意义在于我们能自行定制读取数据时机，<br>
+串口操作实现，采用[CppLinuxSerial](https://github.com/gbmhunter/CppLinuxSerial)库，该库封装了对串口开关、读写功能。多线程串口操作部分，采用[MserialPort](https://github.com/flykule/MserialPort)库的思路进行开发实现，下面是多线程部分介绍以及思路讲解。<br><br>
+首先，我们对串口读写操作设计三个线程任务，分别处理对串口进行读，写，以及检查数据并通知唤醒读线程进行数据读取。这里多一个检查通知线程的意义在于我们能自行定制读取数据时机，<br><br>
 通过修改每次检查后的等待时间，可以减少读取次数，同时增加一次读取的数据量。<br><br>
 其次，由于涉及到多串口，我们还要实现串口间的通信，以及实现安全关闭线程以及回收资源。避免内存泄漏问题。<br><br>
-最后，还需要一个管理者，对每个打开的串口进行增删查改功能。<br><br>
+最后，还需要一个管理者，对每个打开的串口进行增删查改功能。。<br><br>
 下面是每个功能具体实现的介绍。
 
 ## 1.写线程<br>
-实现异步发送，这里采用消息队列的机制。上层开放接口往队列发送消息，线程轮循读取消息队列获取发送的消息往串口发送。这里我们使用C++中的[std::queue](https://zh.cppreference.com/w/cpp/container/queue)来作为消息队列，但是[std::queue](https://zh.cppreference.com/w/cpp/container/queue)是线程不安全的队列，所以需要
-一个锁来确保读写队列时的线程安全，这里使用[std::mutex](https://zh.cppreference.com/w/cpp/thread/mutex)以及[std::lock_guard](https://zh.cppreference.com/w/cpp/thread/lock_guard)来创建互斥锁来实现。现在只差一个问题，该如何做到发送消息给队列后通知写线程读取队列中的消息，实现线程之间的通信？。这里用到另一个C++标准库内的[std::condition_variable](https://zh.cppreference.com/w/cpp/thread/condition_variable)来解决，[std::condition_variable](https://zh.cppreference.com/w/cpp/thread/condition_variable)可以阻塞一个或多个线程，直到其他线程修改共享变量或条件，并通知有意修改变量的线程。这样就完美符合我们的要求。
+要实现非阻塞异步发送，我们这里采用异步线程非阻塞式提交消息到消息队列，写线程中轮循读取消息队列取出消息数据并发送的方式实现。项目中我们使用C++中的[std::queue](https://zh.cppreference.com/w/cpp/container/queue)来作为消息队列，但是[std::queue](https://zh.cppreference.com/w/cpp/container/queue)是线程不安全的队列，所以需要
+一个锁来确保读写队列时的线程安全，这里使用C++中[std::mutex](https://zh.cppreference.com/w/cpp/thread/mutex)以及[std::lock_guard](https://zh.cppreference.com/w/cpp/thread/lock_guard)创建互斥锁，通过互斥锁来实现异步发送消息并保证线程安全。这样我们发送消息的功能就大致完成。现在还差一个问题，就是如何在发送消息后通知读线程读取消息队列的内容并发送，这里涉及到异步线程通信。在C++标准库中，给我们提供了[std::condition_variable](https://zh.cppreference.com/w/cpp/thread/condition_variable)，[std::condition_variable](https://zh.cppreference.com/w/cpp/thread/condition_variable)可以阻塞一个或多个线程，直到其他线程修改共享变量或条件，并通知有意修改变量的线程。这样，最后一个线程异步通信的问题也解决了。
 <br><br>
 下面分别是提供上层发送消息的接口函数doWork以及写线程函数readLoop。<br>
 
@@ -532,7 +533,7 @@ void ReadWriteWorker::checkAvailableLoop() {
 
 
 ## 4.安全关闭/退出 <br>
-既然打开了这么多线程处理任务，当然如何安全的关闭线程以及串口也是我们需要考虑的功能。这里我们首先是需要考虑该如何关闭时通知到各个线程退出循环结束任务。在前面讲解各个线程设计时讲到，线程使用[std::condition_variable](https://zh.cppreference.com/w/cpp/thread/condition_variable)进行唤醒后会根据共享内容条件判断是否继续阻塞，在这里我们也可以利用这个特性增加判断机制。比如用[std::atomic](https://zh.cppreference.com/w/cpp/atomic/atomic)包装一个变量做原子操作进行条件判断。当然，LSerialPort里面我们使用另外一种方式，那就是[std::promise](https://zh.cppreference.com/w/cpp/thread/promise)以及[std::future](https://zh.cppreference.com/w/cpp/thread/future)来实现。[std::promise](https://zh.cppreference.com/w/cpp/thread/promise)提供一种存储值或异常的机制，而[std::future](https://zh.cppreference.com/w/cpp/thread/future)是能访问异步操作结果。[std::promise](https://zh.cppreference.com/w/cpp/thread/promise)可以创建[std::future](https://zh.cppreference.com/w/cpp/thread/future)作关联使用。简单来说就是[std::promise](https://zh.cppreference.com/w/cpp/thread/promise)允许设置一个值，或者异常，这个值或异常可以在未来的某个时刻被关联的[std::future](https://zh.cppreference.com/w/cpp/thread/future)对象访问到。多线程中也可以通过[std::future](https://zh.cppreference.com/w/cpp/thread/future)来实现异步参数获取。
+既然打开了这么多线程处理任务，当然如何安全的关闭线程以及串口也是我们需要考虑的功能。这里我们首先是需要考虑该如何关闭时通知到各个线程退出循环结束任务。在前面讲解各个线程设计时讲到，线程使用[std::condition_variable](https://zh.cppreference.com/w/cpp/thread/condition_variable)进行唤醒后会根据共享内容条件判断是否继续阻塞，我们也可以利用这个特性增加判断机制。比如用[std::atomic](https://zh.cppreference.com/w/cpp/atomic/atomic)包装一个变量做原子操作进行条件判断。当然，LSerialPort里使用另外一种方式，那就是[std::promise](https://zh.cppreference.com/w/cpp/thread/promise)以及[std::future](https://zh.cppreference.com/w/cpp/thread/future)来实现。[std::promise](https://zh.cppreference.com/w/cpp/thread/promise)提供一种存储值或异常的机制，而[std::future](https://zh.cppreference.com/w/cpp/thread/future)是能访问异步操作结果。[std::promise](https://zh.cppreference.com/w/cpp/thread/promise)可以创建[std::future](https://zh.cppreference.com/w/cpp/thread/future)作关联使用。简单来说就是[std::promise](https://zh.cppreference.com/w/cpp/thread/promise)允许设置一个值，或者异常，这个值或异常可以在未来的某个时刻被关联的[std::future](https://zh.cppreference.com/w/cpp/thread/future)对象访问到。多线程中也可以通过[std::future](https://zh.cppreference.com/w/cpp/thread/future)来实现异步参数获取。
 <br><br>
 这里我们把安全退出的判断抽出来作为一个抽象类IWorker，方便以后拓展。<br><br>
 [IWorker.h](https://github.com/RedRackham-R/LSerialPort/blob/master/LSerialPort/src/main/cpp/include/LSerialPort/IWorker.h)
@@ -644,7 +645,7 @@ ReadWriteWorker::~ReadWriteWorker() {
 }
 ```
 ## 5.多串口管理
-前面已经封装好对串口操作读写的对象ReadWriteWorker，现在只需要使用一个管理类，对每个串口操作对象进行管理。存储这边我们使用[std::unordered_map](https://zh.cppreference.com/w/cpp/container/unordered_map)以串口地址和串口操作对象作为键值对的形式进行保存，添加，删除等操作，使用[std::unordered_map](https://zh.cppreference.com/w/cpp/container/unordered_map)的好处在于它内部实现结构采用对键值进行哈希保存数据，不做任何排序，能对map中的单一值进行快速访问，符合我们现在的实现功能要求。<br><br>
+前面已经封装好对串口操作读写的对象ReadWriteWorker，现在只需要使用一个管理类，对每个串口操作对象进行管理。缓存我们使用[std::unordered_map](https://zh.cppreference.com/w/cpp/container/unordered_map)以串口地址和串口操作对象作为键值对的形式进行保存，添加，删除等操作，使用[std::unordered_map](https://zh.cppreference.com/w/cpp/container/unordered_map)的好处在于它内部实现结构采用对键值进行哈希保存数据，不做任何排序，能对map中的单一值进行快速访问，符合我们现在的实现功能要求。<br><br>
 下面是多串口管理类LSerialPortManager声明定义<br><br>
 [LSerialPortManager.h](https://github.com/RedRackham-R/LSerialPort/blob/master/LSerialPort/src/main/cpp/include/LSerialPort/LSerialPortManager.h)
 ```c++
@@ -731,7 +732,7 @@ namespace LSerialPort {
 
 
 # 结语
-最近学了点C++，总感觉需要上手撸点东西。正好公司项目有使用串口的场景，但是发现大多数串口库一般都需要使用者自己在上层实现对串口多线程管理读写，有些不方便。在网上发现个优秀的C++底层实现多线程串口读写管理的库[MserialPort] https://github.com/flykule/MserialPort)
+最近学习了C++基础，总感觉需要上手撸点东西。正好公司项目有使用串口的场景，但是发现大多数串口库一般都需要使用者自己在上层实现对串口多线程管理读写，有些不方便。网上冲浪时发现个优秀的C++底层实现多线程串口读写管理的库[MserialPort] https://github.com/flykule/MserialPort)
 ，遂按照该库的代码思路写了LSerialPort。一方面巩固刚学习学习的C++知识，另一方面是重拾很久没用过的JNI、NDK。
 
 # 特别感谢
