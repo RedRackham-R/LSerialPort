@@ -37,3 +37,6 @@ google-services.json
 
 #rev file
 *.rev
+
+#asc file
+*.asc
