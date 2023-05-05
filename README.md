@@ -298,14 +298,16 @@ int result = LSerialPort.INSTANCE.closeSerialPort("/dev/ttysWK0");
 boolean isOpened = LSerialPort.INSTANCE.hasOpen("/dev/ttysWK0");
         Log.d("LSerialPort", "串口/dev/ttysWK0是否已打开：" + isOpened);
 ```
-<br>
+<br><br>
 
 ## 工程开发环境信息
 NDK ：23.1.7779620 <br>
 C++ ：17 <br>
 Android Gradle Plugin ：7.4.1<br>
 Gradle ：7.5 <br>
-Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1<br>
+Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1
+
+<br><br>
 
 ## 编译工程生成AAR
 1. 导入工程配置后选择Android Studio 中的build -> Refresh Linked C++ Projects 等待Gradle build完成。<br>
