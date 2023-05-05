@@ -42,9 +42,9 @@ namespace LSerialPort {
 
 
     void ReadWriteWorker::doWork(const std::vector<uint8_t> &msg) {
-        std::lock_guard<std::mutex> lk(_mMsgMutex);
+        std::lock_guard<std::mutex> wlk(_mWriteMutex);
         _mMsgQueue.push(msg);
-        _mMsgCond.notify_all();
+        _mWriteCond.notify_all();
     }
 
 
@@ -53,7 +53,7 @@ namespace LSerialPort {
         while (!isInterrupted()) {
             if (_serialPort->GetState() == State::OPEN && _serialPort->Available() > 0) {
                 _dataAvailable.store(true);
-                _mMsgCond.notify_all();
+                _mReadCond.notify_all();
             }
             //这里设置毫秒等待时间
             std::this_thread::sleep_for(std::chrono::milliseconds(_checkIntervalWaitMills));
@@ -65,7 +65,7 @@ namespace LSerialPort {
     void ReadWriteWorker::readLoop() {
         LOGE("start read loop");
         // 等待直至收到发送数据
-        std::unique_lock<std::mutex> lk(_mMsgMutex);
+        std::unique_lock<std::mutex> rlk(_mReadMutex);
         //C++线程首次访问JEnv函数需要先使用AttachCurrentThread把当前线程附加到JVM上下文才能使用JEnv的函数、
         //Jni的native函数不需要是因为是Jvm线程调用函数，所以不需要附加，C++创建线程不数据Jvm，所以要进行关联附加才能使用Jni的函数
         if (LSerialPortManager::jvm->AttachCurrentThread(&_env, nullptr) != JNI_OK) {
@@ -74,7 +74,7 @@ namespace LSerialPort {
         while (!isInterrupted()) {
             //这里等待需要传入当前对象指针，传this会复制当前对象指针而&只会获得当前对象指针引用，
             //如果在lambda表达式中修改了this内容会使得修改无效，一般建议用地址符&
-            _mMsgCond.wait(lk, [&] { return (isInterrupted() || _dataAvailable.load()); });
+            _mReadCond.wait(rlk, [&] { return (isInterrupted() || _dataAvailable.load()); });
             if (isInterrupted()) {
                 break;
             }
@@ -121,12 +121,12 @@ namespace LSerialPort {
     //写循环
     void ReadWriteWorker::writeLoop() {
         // 等待直至 main() 发送数据
-        std::unique_lock<std::mutex> lk(_mMsgMutex);
+        std::unique_lock<std::mutex> lk(_mWriteMutex);
         LOGE("start write loop");
         while (!isInterrupted()) {
             //这里等待需要传入当前对象指针，传this会复制当前对象指针而&只会获得当前对象指针引用，
             //如果在lambda表达式中修改了this内容会使得修改无效，一般建议用地址符&
-            _mMsgCond.wait(lk, [&] { return (isInterrupted() || !_mMsgQueue.empty()); });
+            _mWriteCond.wait(lk, [&] { return (isInterrupted() || !_mMsgQueue.empty()); });
             if (isInterrupted()) {
                 break;
             }

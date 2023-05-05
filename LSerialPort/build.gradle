@@ -8,8 +8,8 @@ plugins {
     id 'maven-publish'
     id 'signing'
 }
-var mVersionName = "20230505"
-var mVersionCode = 20230505
+var mVersionName = "1.0.0"
+var mVersionCode = 1
 android {
     signingConfigs {
         release {

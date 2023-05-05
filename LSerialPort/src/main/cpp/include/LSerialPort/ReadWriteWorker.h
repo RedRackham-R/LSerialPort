@@ -54,11 +54,14 @@ namespace LSerialPort {
         void interrupte() override {
             //监听器锁
             std::lock_guard<std::mutex> llk(_mListenerMutex);
-            //消息锁
-            std::lock_guard<std::mutex> lk(_mMsgMutex);
+            //写锁
+            std::lock_guard<std::mutex> rlk(_mReadMutex);
+            //读锁
+            std::lock_guard<std::mutex> wlk(_mWriteMutex);
             //发送退出信号
             IWorker::interrupte();
-            _mMsgCond.notify_all();
+            _mReadCond.notify_all();
+            _mWriteCond.notify_all();
         }
 
         /**
@@ -88,14 +91,19 @@ namespace LSerialPort {
         LSerialPortDataListener *_prepListener = nullptr;
 
         JNIEnv *_env{};
-        //消息锁
-        std::mutex _mMsgMutex;
+        //读锁
+        std::mutex _mWriteMutex;
+        //写锁
+        std::mutex _mReadMutex;
+
         //监听器锁
         std::mutex _mListenerMutex;
         //消息队列
         std::queue<std::vector<uint8_t>> _mMsgQueue;
-        //消息通知
-        std::condition_variable _mMsgCond;
+        //写消息通知
+        std::condition_variable _mWriteCond;
+        //读消息通知
+        std::condition_variable _mReadCond;
         //读取缓存是否有数据
         std::atomic<bool> _dataAvailable = false;
         //检查是否有数据等待时间
