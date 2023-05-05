@@ -6,8 +6,9 @@
 该库采用C++实现异步线程读写串口。上层使用无需过多关心异步线程读写问题。
 <br><br>
 <img width="480" alt="12e2d4e30b495362d7ffaf3a1b63719" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8962cb0e03b74b6da38d743405cdd77d~tplv-k3u1fbpfcp-watermark.image?">
-<br><br>
-* [下载AAR以及demo](https://github.com/RedRackham-R/LSerialPort/releases)（平台：arm64-v8a、armeabi-v7a）
+<br>
+* #### [下载demo](https://github.com/RedRackham-R/LSerialPort/releases) <br>
+（平台：arm64-v8a、armeabi-v7a）
 
 ## 接口说明
 <table>
@@ -62,7 +63,7 @@
 </table>
 
 ## Native接口说明
-### 以下是jni函数，不推荐直接使用。
+以下是jni函数，不推荐直接使用。
 <table>
   <tr>
     <td>函数名称</td>
@@ -108,7 +109,17 @@
 
 <br>
 
-## 引入AAR
+## 框架引入
+* ### 通过maven central引入<br>
+  **Module:build.gradle**
+```
+dependencies {
+   ...
+   implementation 'io.github.RedRackham-R:LSerialPort:20230505-debug'
+}
+```
+
+* ### 通过下载aar包引入<br>
 1. 下载 [AAR包](https://github.com/RedRackham-R/LSerialPort/releases)放入工程内libs目录下<br>
    <img width="309" alt="d1bd64379531d24b56db04b24a30bc9" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b8d78c7ef78c4b19ba95e430adb36d59~tplv-k3u1fbpfcp-watermark.image?">
 
