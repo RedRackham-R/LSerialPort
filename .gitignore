@@ -31,3 +31,9 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+#gpg file
+*.gpg
+
+#rev file
+*.rev

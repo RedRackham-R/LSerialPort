@@ -1,11 +1,21 @@
+import org.gradle.initialization.Environment
+
+import java.nio.charset.Charset
+
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
+    id 'signing'
 }
-
+var mVersionName = "20230505"
+var mVersionCode = 20230505
 android {
     signingConfigs {
         release {
+        }
+        debug {
+
         }
     }
     namespace 'com.redrackham.lserialport'
@@ -26,8 +36,8 @@ android {
                 cppFlags '-std=c++17'
             }
         }
-        versionCode 20230504
-        versionName "20230504"
+        versionCode mVersionCode
+        versionName mVersionName
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
@@ -36,6 +46,10 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -53,14 +67,117 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    publishing {
+        singleVariant("debug") {
+            // if you don't want sources/javadoc, remove these lines
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.5.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+
+
+var signingKeyId = ""//签名的密钥后8位
+var signingPassword = ""//签名设置的密码
+var secretKeyRingFile = ""//生成的secring.gpg文件目录
+var ossrhUsername = ""//sonatype用户名
+var ossrhPassword = "" //sonatype密码
+var PUBLISH_NAME = ""//推送用户名
+var PUBLISH_GROUP_ID = ""//groupid
+var PUBLISH_EMAIL = ""//email
+
+var localProperties = project.rootProject.file("local.properties")
+
+if (localProperties.exists()) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    signingKeyId = properties.getProperty("signing.keyId")
+    signingPassword = properties.getProperty("signing.password")
+    secretKeyRingFile = properties.getProperty("signing.secretKeyRingFile")
+    ossrhUsername = properties.getProperty("ossrhUsername")
+    ossrhPassword = properties.getProperty("ossrhPassword")
+    PUBLISH_NAME = properties.getProperty("PUBLISH_NAME")
+    PUBLISH_GROUP_ID = properties.getProperty("PUBLISH_GROUP_ID")
+    PUBLISH_EMAIL = properties.getProperty("PUBLISH_EMAIL")
+
+} else {
+    println("No props file, loading env vars")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            //自己定义名称
+            debug(MavenPublication) {
+                groupId = PUBLISH_GROUP_ID
+                artifactId = "LSerialPort"
+                version = mVersionName + "-debug"
+                artifact("$buildDir/outputs/aar/${project.getName()}-${mVersionName}-debug.aar")
+                pom {
+                    name.value("LSerialPort")
+                    description.value("LSerialPort A C++ implementation of multi-threaded management read and write serial port Android library")
+                    url.value("https://github.com/RedRackham-R/LSerialPort")
+
+                    licenses {
+                        license {
+                            //协议类型
+                            name = 'The MIT License'
+                            url = "https://github.com/RedRackham-R/LSerialPort/blob/master/LICENSE"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.value(PUBLISH_NAME)
+                            name.value(PUBLISH_NAME)
+                            email.value(PUBLISH_EMAIL)
+                        }
+                    }
+
+                    scm {
+                        connection.value("scm:git@github.com/RedRackham-R/LSerialPort.git")
+                        developerConnection.value("scm:git@github.com/RedRackham-R/LSerialPort.git")
+                        url.value("https://github.com/RedRackham-R/LSerialPort")
+                    }
+
+                }
+            }
+
+        }
+
+        repositories {
+            maven {
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+
+    }
+}
+
+//signing的配置数据在编译后必须是project的properties，即在全局可识别。
+//这里的配置的数据可供整个Project全局访问。
+gradle.taskGraph.whenReady {
+    allprojects {
+        ext["signing.keyId"] = signingKeyId
+        ext["signing.password"] = signingPassword
+        ext["signing.secretKeyRingFile"] = secretKeyRingFile
+    }
+}
+
+signing {
+    sign(publishing.publications)
 }
