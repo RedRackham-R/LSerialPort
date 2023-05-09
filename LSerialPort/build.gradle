@@ -1,11 +1,9 @@
-import org.gradle.initialization.Environment
-
-import java.nio.charset.Charset
-
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    //添加publish
     id 'maven-publish'
+    //添加signing
     id 'signing'
 }
 var mVersionName = "1.0.0"
@@ -117,25 +115,35 @@ if (localProperties.exists()) {
 afterEvaluate {
     publishing {
         publications {
-            //自己定义名称
-            debug(MavenPublication) {
+            uploadToMavenCentral(MavenPublication) {
+                /* groupId:注册的Sonatype Group Id
+                 * artifactId:项目唯一标识，一般是工程名
+                 * version:库的版本号
+                 * artifact:工程项目，这里是上传aar包，所以指向aar包的生成地址
+                 *
+                 * gradle引入式：implementation ‘groupId:artifactId:version’
+                 * 比如：implementation 'io.github.RedRackham-R:LSerialPort:1.0.0-debug'
+                 *
+                 * */
                 groupId = PUBLISH_GROUP_ID
                 artifactId = "LSerialPort"
                 version = mVersionName + "-debug"
                 artifact("$buildDir/outputs/aar/${project.getName()}-${mVersionName}-debug.aar")
                 pom {
+                    //项目名 （任意填）
                     name.value("LSerialPort")
+                    //项目介绍 （任意填）
                     description.value("LSerialPort A C++ implementation of multi-threaded management read and write serial port Android library")
+                    //项目地址
                     url.value("https://github.com/RedRackham-R/LSerialPort")
-
+                    //协议类型 默认是Apache License，你想要换也可以改成别的
                     licenses {
                         license {
-                            //协议类型
                             name = 'The MIT License'
                             url = "https://github.com/RedRackham-R/LSerialPort/blob/master/LICENSE"
                         }
                     }
-
+                    //开发者信息，id，名字，邮箱之类的
                     developers {
                         developer {
                             id.value(PUBLISH_NAME)
@@ -143,28 +151,28 @@ afterEvaluate {
                             email.value(PUBLISH_EMAIL)
                         }
                     }
-
+                    //版本控制信息，下面是github格式参考，把地址替换成自己的
                     scm {
+                        //git地址
                         connection.value("scm:git@github.com/RedRackham-R/LSerialPort.git")
                         developerConnection.value("scm:git@github.com/RedRackham-R/LSerialPort.git")
+                        //工程url地址
                         url.value("https://github.com/RedRackham-R/LSerialPort")
                     }
-
                 }
             }
-
         }
-
         repositories {
             maven {
                 url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                 credentials {
+                    //你的sonatype账号
                     username = ossrhUsername
+                    //你的sonatype密码
                     password = ossrhPassword
                 }
             }
         }
-
     }
 }
 
