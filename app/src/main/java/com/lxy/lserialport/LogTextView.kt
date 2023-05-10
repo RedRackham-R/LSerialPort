@@ -10,7 +10,7 @@ class LogTextView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : androidx.appcompat.widget.AppCompatTextView(context, attrs, defStyleAttr) {
 
-    private val MAX_LINES = 500 // 最多显示的行数
+    private val MAX_LINES = 50 // 最多显示的行数
     private var mLogList: LinkedList<String> = LinkedList<String>()
 
     override fun setText(text: CharSequence?, type: BufferType?) {

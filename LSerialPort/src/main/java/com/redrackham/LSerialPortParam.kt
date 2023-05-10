@@ -3,6 +3,21 @@ package com.redrackham
 import androidx.annotation.IntDef
 
 
+@Retention(AnnotationRetention.SOURCE)
+@IntDef(
+    MutiThreadClientType.READ_WRITE,
+    MutiThreadClientType.ONLY_READ,
+    MutiThreadClientType.ONLY_WRITE,
+)
+
+annotation class MutiThreadClientType {
+    companion object {
+        const val READ_WRITE = 0
+        const val ONLY_READ = 1
+        const val ONLY_WRITE = 2
+    }
+}
+
 /**
  * 波特率
  */
@@ -72,7 +87,7 @@ annotation class DataBits {
         const val SEVEN = 7
         const val EIGHT = 8
     }
-};
+}
 
 
 /**

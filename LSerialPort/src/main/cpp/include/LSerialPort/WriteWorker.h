@@ -52,7 +52,7 @@ namespace LSerialPort {
          * 串口是否打开
          * @return
          */
-        bool isOpened();
+        bool isOpened() override;
 
     private:
         //串口对象

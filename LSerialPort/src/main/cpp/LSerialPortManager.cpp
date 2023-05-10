@@ -4,6 +4,7 @@
 #include "include/LSerialPort/LSerialPortManager.h"
 #include "include/LSerialPort/WriteWorker.h"
 #include "include/LSerialPort/ReadWorker.h"
+#include "include/LSerialPort/SyncReadWriteWorker.h"
 
 using namespace mn::CppLinuxSerial;
 
@@ -11,6 +12,52 @@ namespace LSerialPort {
 
 
     LSerialPortManager::LSerialPortManager() = default;
+
+
+    int LSerialPortManager::addSyncReadWriteDevice(std::string &path, BaudRate &baudRate,
+                                                   NumDataBits &dataBits, Parity &parity,
+                                                   NumStopBits &stopBits,
+                                                   int32_t &readTimeoutMills) {
+        //检查串口是否存在
+        if (hasDevice(path)) {
+            char ch[20];
+            char *path_char = strcpy(ch, path.c_str());
+            LOGE("serial port %s has been opened, please do not open the serial port repeatedly",
+                 path_char);
+            return -1;
+        }
+        //串口读取数据超时范围
+        if (readTimeoutMills < -1) {
+            LOGE("read timeout mills  was < -1, which is invalid.");
+            return -1;
+        }
+
+        //串口读取数据超时范围
+        if (readTimeoutMills > 25500) {
+            LOGE("read timeout mills  was > 25500, which is invalid.");
+            return -1;
+        }
+        // worker_ptr 是占有 ReadWorker 的 unique_ptr
+        std::unique_ptr<SyncReadWriteWorker> worker_ptr = std::make_unique<SyncReadWriteWorker>(
+                path,
+                baudRate,
+                dataBits,
+                parity,
+                stopBits,
+                readTimeoutMills);
+
+        if (worker_ptr->isOpened()) {
+            // 作为指向基类的指针
+            _mDevices[path] = std::move(worker_ptr);
+            return 0;
+        } else {
+            char ch[20];
+            char *path_char = strcpy(ch, path.c_str());
+            LOGE("open serial port [%s] fail！", path_char);
+            return -1;
+        }
+
+    }
 
 
     int LSerialPortManager::addReadOnlyDevice(std::string &path, BaudRate &baudRate,
@@ -27,8 +74,14 @@ namespace LSerialPort {
             return -1;
         }
         //串口读取数据超时范围
-        if (readIntervalTimeoutMills < -1 || readIntervalTimeoutMills > 25500) {
-            LOGE("serial port timeout mills range between -1 and 25500!");
+        if (readIntervalTimeoutMills < -1) {
+            LOGE("read timeout mills  was < -1, which is invalid.");
+            return -1;
+        }
+
+        //串口读取数据超时范围
+        if (readIntervalTimeoutMills > 25500) {
+            LOGE("read timeout mills  was > 25500, which is invalid.");
             return -1;
         }
 
@@ -74,8 +127,14 @@ namespace LSerialPort {
             return -1;
         }
         //串口读取数据超时范围
-        if (readIntervalTimeoutMills < -1 || readIntervalTimeoutMills > 25500) {
-            LOGE("serial port timeout mills range between -1 and 25500!");
+        if (readIntervalTimeoutMills < -1) {
+            LOGE("read timeout mills  was < -1, which is invalid.");
+            return -1;
+        }
+
+        //串口读取数据超时范围
+        if (readIntervalTimeoutMills > 25500) {
+            LOGE("read timeout mills  was > 25500, which is invalid.");
             return -1;
         }
         // worker_ptr 是占有 WriteWorker 的 unique_ptr
@@ -118,8 +177,14 @@ namespace LSerialPort {
             return -1;
         }
         //串口读取数据超时范围
-        if (readIntervalTimeoutMills < -1 || readIntervalTimeoutMills > 25500) {
-            LOGE("serial port timeout mills range between -1 and 25500!");
+        if (readIntervalTimeoutMills < -1) {
+            LOGE("read timeout mills  was < -1, which is invalid.");
+            return -1;
+        }
+
+        //串口读取数据超时范围
+        if (readIntervalTimeoutMills > 25500) {
+            LOGE("read timeout mills  was > 25500, which is invalid.");
             return -1;
         }
 
@@ -166,6 +231,51 @@ namespace LSerialPort {
     bool LSerialPortManager::hasDevice(const std::string &path) {
         return _mDevices[path] != nullptr;
     }
+
+
+    std::vector<uint8_t>
+    LSerialPortManager::readMessageSync(const std::string &path) {
+        if (hasDevice(path)) {
+            IWorker *worker = _mDevices[path].get();
+            //尝试动态转换为ReadWriteWorker
+            auto *syncRWWroker = dynamic_cast<SyncReadWriteWorker *>(worker);
+            if (syncRWWroker != nullptr) {
+                return syncRWWroker->read();
+            } else {
+                THROW_EXCEPT(
+                        "Unable to read messages by synchronous thread, because the serial port [%s] is currently being read and written by asynchronous thread.please use the [addSyncReadWriteDevice] function to open the serial port");
+            }
+        } else {
+            THROW_EXCEPT("failed to send message, please open serial port first")
+        }
+    }
+
+
+    int LSerialPortManager::writeMessageSync(const std::string &path,
+                                             const std::vector<uint8_t> &msg) {
+        if (hasDevice(path)) {
+            IWorker *worker = _mDevices[path].get();
+            //尝试动态转换为ReadWriteWorker
+            auto *syncRWWroker = dynamic_cast<SyncReadWriteWorker *>(worker);
+            if (syncRWWroker != nullptr) {
+                syncRWWroker->doWork(msg);
+                return 0;
+            } else {
+                char ch[20];
+                char *path_char = strcpy(ch, path.c_str());
+                LOGE("Unable to send messages by synchronous thread, because the serial port [%s] is currently being read and written by asynchronous thread.please use the [addSyncReadWriteDevice] function to open the serial port",
+                     path_char);
+                return -1;
+            }
+        } else {
+            char ch[20];
+            char *path_char = strcpy(ch, path.c_str());
+            LOGE("failed to send message, please open serial port [%s] first",
+                 path_char);
+            return -1;
+        }
+    }
+
 
     int LSerialPortManager::sendMessage(const std::string &path, const std::vector<uint8_t> &msg) {
         if (hasDevice(path)) {

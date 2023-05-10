@@ -43,7 +43,6 @@ namespace LSerialPort {
                 env->CallVoidMethod(_jListener, _onDataReceivedMethod, jData);
                 env->DeleteLocalRef(jData);
             }
-
         } else {
             // 直接拷贝到jbyteArray中
             if (env == nullptr) {

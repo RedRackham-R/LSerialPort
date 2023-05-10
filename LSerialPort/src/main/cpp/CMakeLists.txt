@@ -28,6 +28,7 @@ add_library( # Sets the name of the library.
         LSerialPortDataListener.cpp
         WriteWorker.cpp
         ReadWorker.cpp
+        SyncReadWriteWorker.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

@@ -15,7 +15,6 @@ namespace LSerialPort {
             NumStopBits &stopBits,
             int32_t &readIntervalTimeoutMills,
             long &checkIntervalWaitMills) {
-
         _serialPort = new SerialPort(path, baudRate, dataBits, parity, stopBits);
         //设置读取超时时间 这个参数慢慢调看效果 取值范围 -1 ~ 25500   -1表示无限超时等待 直到有数据返回，0标识表示立即返回任何数据，>0则等待x毫秒后会取消阻塞
         _serialPort->SetTimeout(readIntervalTimeoutMills);
@@ -190,7 +189,6 @@ namespace LSerialPort {
             delete _curlistener;
             _curlistener = nullptr;
         }
-
 
         LOGE("close SerialPort");
         if (_serialPort != nullptr) {

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.TimeUtils
 import com.lxy.lserialport.databinding.ActivityMainBinding
 import com.redrackham.*
+import com.redrackham.client.LSerialPortClient
 
 
 class MainActivity : AppCompatActivity() {
@@ -54,6 +55,8 @@ class MainActivity : AppCompatActivity() {
     )
 
     private val defMsg = "FF0102030405060708090A0B0C0D0E0FFE"
+
+    private var lSerialPortClient: LSerialPortClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,19 +130,29 @@ class MainActivity : AppCompatActivity() {
                 //停止位
                 val stopBits = binding.spStopbits.selectedItem as Int
 
+                //这里判断下 避免创建多个client对象
+                if (lSerialPortClient?.hasOpen() == true) {
+                    showLogOnMain("打开串口失败，请先关闭当前运行串口【${lSerialPortClient!!.path}】!!!")
+                    return@setOnClickListener
+                }
+
+                lSerialPortClient = LSerialPortClient.Builder(path)
+                    .baudrate(baudrate)
+                    .dataBits(dataBits)
+                    .parity(parity)
+                    .stopBits(stopBits)
+                    .build()
                 //打开串口
-                val result =
-                    LSerialPort.openSerialPort(path, baudrate, dataBits, parity, stopBits)
+                val result = lSerialPortClient?.open()
                 if (result == 0) {
                     setUIClickbale(false)
                     showLogOnMain("打开串口${path}成功")
                     showLogOnMain("Baudrate:${baudrate}   DataBits:$dataBits   Parity:${binding.spParity.selectedItem}   StopBits:$stopBits")
-
                     //打开成功设置监听器
-                    LSerialPort.setOnLSerialPortListener(path) { msg ->
+                    lSerialPortClient!!.setListener { msg ->
                         showLogOnMain("收 <<< ${msg.toHexString()}")
+                        lSerialPortClient!!.sendMsg(msg)
                     }
-
                 } else {
                     showLogOnMain("打开串口${path}失败！")
                 }
@@ -150,7 +163,7 @@ class MainActivity : AppCompatActivity() {
             setOnClickListener {
                 //串口地址
                 val path = binding.spPath.selectedItem as String
-                val result = LSerialPort.closeSerialPort(path)
+                val result = lSerialPortClient?.close()
                 if (result == 0) {
                     setUIClickbale(true)
                     showLogOnMain("关闭串口${path} 成功！")
@@ -174,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                 val path = binding.spPath.selectedItem as String
                 val msgStr = binding.edtMsg.text.toString().trim()
                 val msgHex = msgStr.hexToByteArray()
-                val result = LSerialPort.sendMsg(path, msgHex)
+                val result = lSerialPortClient?.sendMsg(msgHex)
                 if (result == 0) {
                     showLogOnMain("发 >>> $msgStr")
                 } else {

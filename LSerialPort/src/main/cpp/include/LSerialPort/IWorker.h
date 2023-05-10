@@ -21,6 +21,8 @@ namespace LSerialPort {
         //发送消息
         virtual void doWork(const std::vector<uint8_t> &msg) = 0;
 
+        //串口是否打开
+        virtual bool isOpened() = 0;
 
         //退出
         virtual void interrupte() {

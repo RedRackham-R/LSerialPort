@@ -81,6 +81,26 @@ namespace LSerialPort {
 
 
         /**
+         * 添加同步设备
+         * @param path 串口地址
+         * @param baudRate 波特率
+         * @param dataBits 数据位
+         * @param parity 校验位
+         * @param stopBits 停止位
+         * @param readTimeoutMills 读数据等待时间 -1表示无限超时等待 直到有数据返回，0标识表示立即返回任何数据，>0则等待x毫秒后会取消阻塞
+         * @return
+         */
+        int addSyncReadWriteDevice(
+                std::string &path,
+                BaudRate &baudRate,
+                NumDataBits &dataBits,
+                Parity &parity,
+                NumStopBits &stopBits,
+                int32_t &readTimeoutMills
+        );
+
+
+        /**
          * 删除设备
          * @param path 串口地址
          * @return
@@ -110,6 +130,10 @@ namespace LSerialPort {
          */
         int setLSerialPortDataListener(const std::string &path, jobject *listener);
 
+
+        int writeMessageSync(const std::string &path, const std::vector<uint8_t> &msg);
+
+        std::vector<uint8_t> readMessageSync(const std::string &path);
 
     private:
         //已加载的串口设备
