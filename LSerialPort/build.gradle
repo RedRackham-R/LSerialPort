@@ -127,10 +127,10 @@ afterEvaluate {
                  * */
                 groupId = PUBLISH_GROUP_ID
                 artifactId = "LSerialPort"
-                version = mVersionName + "-debug"
+                version = mVersionName
 
                 //上传aar以及源码
-                artifact("$buildDir/outputs/aar/${project.getName()}-${mVersionName}-debug.aar")
+                artifact("$buildDir/outputs/aar/${project.getName()}-${mVersionName}-release.aar")
                 artifact androidSourcesJar
                 pom {
                     //项目名 （任意填）
