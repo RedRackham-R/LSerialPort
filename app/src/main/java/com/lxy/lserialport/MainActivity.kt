@@ -183,7 +183,6 @@ class MainActivity : AppCompatActivity() {
         binding.btnSendMsg.run {
             setOnClickListener {
                 //串口地址
-                val path = binding.spPath.selectedItem as String
                 val msgStr = binding.edtMsg.text.toString().trim()
                 val msgHex = msgStr.hexToByteArray()
                 lSerialPortClient?.sendMsg(msgHex)
