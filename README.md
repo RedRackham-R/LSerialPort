@@ -3,123 +3,28 @@
 * [项目地址] https://github.com/RedRackham-R/LSerialPort)
 
 
-该库采用C++实现异步线程读写串口。上层使用无需过多关心异步线程读写问题。
-<br><br>
+该库采用C++实现异步线程读写串口。上层使用无需过多关心异步线程读写问题。<br><br>
+同时也支持非异步读写串口。<br>
+
 <img width="480" alt="12e2d4e30b495362d7ffaf3a1b63719" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8962cb0e03b74b6da38d743405cdd77d~tplv-k3u1fbpfcp-watermark.image?">
 <br>
-* #### [下载demo](https://github.com/RedRackham-R/LSerialPort/releases) <br>
+
+[下载demo](https://github.com/RedRackham-R/LSerialPort/releases)
 （平台：arm64-v8a、armeabi-v7a）
 
-## 接口说明
-<table>
-  <tr>
-    <td>函数名称</td>
-    <td>说明</td>
-    <td>返回值</td>
-    <td>备注</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.openSerialPort</td>
-    <td>开启串口</td>
-    <td>0：成功<br>1：失败</td>
-    <td>对串口读写前必须先使用该函数打开串口。</td>   
-  </tr>
-  <tr>
-    <td>LSerialPort.openSerialPortReadOnly</td>
-    <td>以只读方式开启串口</td>
-    <td>0：成功<br>1：失败</td>
-    <td>使用只读方式打开串口。打开后无法主动发送数据，只能被动接收。</td>   
-  </tr>
-  <tr>
-    <td>LSerialPort.openSerialPortWriteOnly</td>
-    <td>以只写方式开启串口</td>
-    <td>0：成功<br>1：失败</td>
-    <td>使用写读方式打开串口。打开后无法接收数据，只能主动发送。</td>   
-  </tr>
-  <tr>
-    <td>LSerialPort.sendMsg</td>
-    <td>发送二进制数据</td>
-    <td>0：成功<br>1：失败</td>
-    <td>在读写或只写方式打开串口后，异步发送消息给串口。底层使用queue+mutex维护实现一个线程安全消息队列。上层可在任意线程内调用该函数。</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.setOnLSerialPortListener</td>
-    <td>设置串口接收监听器</td>
-    <td>0：成功<br>1：失败</td>
-    <td>在读写或只读方式打开串口后，当接收到串口数据时会调用该回调<br><br>注意！！！该回调线程为底层读线程，不推荐在该回调线程做任何耗时操作，以免影响线程消息读取。</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.closeSerialPort</td>
-    <td>关闭串口</td>
-    <td>0：成功<br>1：失败</td>
-    <td>停止底层线程并关闭串口，该函数会阻塞调用线程直到资源释放完毕。</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.hasOpen</td>
-    <td>检查串口是否打开</td>
-    <td>true：已打开false：未打开</td>
-    <td></td>
-  </tr>
-</table>
 
-## Native接口说明
-以下是jni函数，不推荐直接使用。
-<table>
-  <tr>
-    <td>函数名称</td>
-    <td>说明</td>
-    <td>返回值</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.native_openSerialPort</td>
-    <td>开启串口</td>
-    <td>0:成功<br>1:失败</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.native_openSerialPortReadOnly</td>
-    <td>只读方式开启串口</td>
-    <td>0:成功<br>1:失败</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.native_openSerialPortWriteOnly</td>
-    <td>只写方式开启串口</td>
-    <td>0:成功<br>1:失败</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.native_sendMsg</td>
-    <td>发送二进制数据</td>
-    <td>0:成功<br>1:失败</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.native_setLSerialPortDataListener</td>
-    <td>设置串口接收监听器</td>
-    <td>无</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.native_closeSerialPort</td>
-    <td>关闭串口</td>
-    <td>0:成功<br>1:失败</td>
-  </tr>
-  <tr>
-    <td>LSerialPort.native_hasOpen</td>
-    <td>检查串口是否打开</td>
-    <td>true:成功<br>false:失败</td>
-  </tr>
-</table>
-
-<br>
-
-## 框架引入
-* ### 通过maven central引入<br>
+# 框架引入
+目前工程已经上传至Maven Central，可以直接通过依赖方式引入。
+## maven central引入<br>
   **Module:build.gradle**
-```
+```kotlin
 dependencies {
-   ...
-   implementation 'io.github.RedRackham-R:LSerialPort:1.0.0-debug'
+    ...
+    implementation("io.github.RedRackham-R:LSerialPort:2.0.2")
 }
 ```
 
-* ### 通过下载aar包引入<br>
+## aar包引入<br>
 1. 下载 [AAR包](https://github.com/RedRackham-R/LSerialPort/releases)放入工程内libs目录下<br>
    <img width="309" alt="d1bd64379531d24b56db04b24a30bc9" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b8d78c7ef78c4b19ba95e430adb36d59~tplv-k3u1fbpfcp-watermark.image?">
 
@@ -132,182 +37,136 @@ implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
 
 <br><br>
 
-## 开始使用（Kotlin）[参考代码](https://github.com/RedRackham-R/LSerialPort/blob/master/app/src/main/java/com/lxy/lserialport/MainActivity.kt)
+# 开始使用 
+
+> 注意！ 该文档更新于2023年05月11日，当前文档使用版本为【**v2**】。如果查看旧版v1文档请看这里：https://github.com/RedRackham-R/LSerialPort/blob/v1/README.md
+
+## 异步操作串口 
+LSerialPort提供了异步操作串口的类[LSerialPortClient](https://github.com/RedRackham-R/LSerialPort/blob/v2/LSerialPort/src/main/java/com/redrackham/client/LSerialPortClient.kt)。通过该类对串口进行异步开关以及读写操作。下面是一些简单的调用例子。<br><br>
+完整使用可以查看 [**>参考代码<**](https://github.com/RedRackham-R/LSerialPort/blob/v2/app/src/main/java/com/lxy/lserialport/guide/LSerialPortClientExample.kt)
+<br><br>
+
 
 ### 打开串口
-
 ```kotlin
-//打开串口/dev/ttysWK0,波特率为9600
-val result = LSerialPort.openSerialPort(path = "/dev/ttysWK0",baudrate =  BaudRate.B_9600)
+//简单创建串口，默认波特率:9600 数据位:8 校验位:无 停止位:1
+val simpleClient = LSerialPortClient.Builder("/dev/ttysWK0").build()
 
-//当然也可以分别定制数据位，校验位，停止位。
-//默认数据位：8，校验位：无，停止位：1
-val result = LSerialPort.openSerialPort(
-   path = "/dev/ttysWK0", //串口地址
-   baudrate = BaudRate.B_9600,//波特率
-   dataBits = DataBits.EIGHT,//数据位
-   parity = Parity.NONE,//校验位
-   stopBits = StopBits.ONE//停止位
-)
-
-
-//如果需要一次返回尽量多一些数据。可以设置checkIntervalWaitMills参数。
-//该函数是线程循环检查串口是否有数据并通知回传的等待时间，设置等待时间越长，数据返回量越大，当然数据回调的间隔也会越久，酌情配置。
-//默认等待时间：0 单位：毫秒
-val result = LSerialPort.openSerialPort(
-   path = "/dev/ttysWK0",
-   baudrate = BaudRate.B_9600,
-   checkIntervalWaitMills = 10//设置等待时间10ms 
-)
-
-//只读方式打开串口
-val result = LSerialPort.openSerialPortReadOnly(
-   path = "/dev/ttysWK0", //串口地址
-   baudrate = BaudRate.B_9600,//波特率
-   dataBits = DataBits.EIGHT,//数据位
-   parity = Parity.NONE,//校验位
-   stopBits = StopBits.ONE,//停止位
-   checkIntervalWaitMills =0//设置等待时间0ms
-)
-
-//只写方式打开串口
-val result = LSerialPort.openSerialPortWriteOnly(
-   path = "/dev/ttysWK0", //串口地址
-   baudrate = BaudRate.B_9600,//波特率
-   dataBits = DataBits.EIGHT,//数据位
-   parity = Parity.NONE,//校验位
-   stopBits = StopBits.ONE//停止位
-)
+//当然，你可以通过建造类类自由的配置各种参数
+val customClient = LSerialPortClient.Builder("/dev/ttysWK0")
+    .baudrate(BaudRate.B_115200)//波特率
+    .dataBits(DataBits.EIGHT)//数据位
+    .parity(Parity.NONE)//校验位
+    .stopBits(StopBits.ONE)//停止位
+    .checkIntervalWaitMills(0)//循环查询间隔等待时间，等待时间越长一次返回数据量越多，单位：ms
+    .build()
+    
+//用client参数打开串口，当返回result == 0 时串口开启成功
+val result = simpleClient.open()
+if(result == 0){
+  //串口开启成功...
+}
 ```
 
-### 发送一条数据
+### 发送数据
 ```kotlin
-//打开串口后发送数据
-val msg = byteArrayOf(0xFF.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0x04.toByte(),0x05.toByte(),0xFE.toByte())
-val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
+//消息数据（byte数组类型）
+val msg = byteArrayOf(0xFF.toByte(),0x00.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0x04.toByte(),0x05.toByte(),0x06.toByte(),0xFE.toByte())
+//发送消息
+client.sendMsg(msg)
 
-//可以在子线程内发送数据，发送线程以及队列由C++部分维护，无需关心线程同步问题
+//当然你也可以在子线程中发送消息，无需关心线程问题
 Thread{
-   val msg = byteArrayOf(0xFF.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0xFE.toByte())
-   val result = LSerialPort.sendMsg("/dev/ttysWK0",msg)
+   client.sendMsg(msg)
 }.start()
 ```
 
-### 设置监听器
+### 接收数据
 ```kotlin
-//打开串口后设置监听器 返回数据为byteArray
-//注意！ 如果进行多次设置，每次会覆盖掉前一个监听器。
-val result = LSerialPort.setOnLSerialPortListener("/dev/ttysWK0") { msg ->
-   Log.d("LSerialPort","接收到数据长度：${msg.size}")
+//设置回调监听器，多次设置会替换前一个监听器
+client.setListener { data ->
+    Log.e("LSerialPortClientExample", "异步线程接收到数据，数据大小：${data.size}")
 }
 ```
 
 ### 关闭串口
 ```kotlin
-//调用时该函数会阻塞等待C++线程退出，需要一定耗时
-val result = LSerialPort.closeSerialPort("/dev/ttysWK0")
+//关闭串口根据返回result判断是否关闭成功，当result == 0 关闭成功
+val result = client.close()
+if(result == 0){
+  //串口关闭成功...
+}
 ```
+<br><br>
+## 非异步操作串口 
+LSerialPort同时也提供了非异步操作串口的类[LSerialPortClient](https://github.com/RedRackham-R/LSerialPort/blob/v2/LSerialPort/src/main/java/com/redrackham/client/LSerialPortSyncClient.kt)，给想要自己控制串口读写线程的同学。下面是一些简单调用说明。<br>
 
-### 判断串口是否已经打开
-```kotlin
-//使用该函数判断串口是否已经打开
-val isOpened:Boolean = LSerialPort.hasOpen("/dev/ttysWK0")
-Log.d("LSerialPort","串口/dev/ttysWK0是否已打开：$isOpened}")
-```
-
+具体使用可以查看 [**>参考代码<**](https://github.com/RedRackham-R/LSerialPort/blob/v2/app/src/main/java/com/lxy/lserialport/guide/LSerialPortSyncClientExample.kt)
 <br><br>
 
-## 开始使用（Java）
-
 ### 打开串口
+**LSerialPortSyncClient**
+```kotlin
+//创建clientBuilder，该client操作串口：ttysWK0。通过建造者我们可以选择定制参数
+val client = LSerialPortSyncClient.Builder("/dev/ttysWK0")
+    .baudrate(BaudRate.B_115200)//波特率
+    .dataBits(DataBits.EIGHT)//数据位
+    .parity(Parity.NONE)//校验位
+    .stopBits(StopBits.ONE)//停止位
+    //读取数据超时时间，当传入
+    //   -1:一直阻塞线程等待返回
+    //    0:无论有没有数据，立即返回。如果没有数据，则返回一个空的byte数组
+    //大于0:阻塞当前线程等待返回时间。如果没有数据，则返回一个空的byte数组  单位（ms）
+    .readTimeoutMills(-1)
+    .build()
 
-```Java
-//打开串口/dev/ttysWK0,波特率为9600
-int result = LSerialPort.INSTANCE.openSerialPort("/dev/ttysWK0", BaudRate.B_9600);
-
-//当然也可以分别定制数据位，校验位，停止位。
-//默认数据位：8，校验位：无，停止位：1
-        int result = LSerialPort.INSTANCE.openSerialPort(
-        "/dev/ttysWK0", //串口地址
-        BaudRate.B_9600,//波特率
-        DataBits.EIGHT,//数据位
-        Parity.NONE,//校验位
-        StopBits.ONE//停止位
-        );
-
-//如果需要一次返回尽量多一些数据。可以设置checkIntervalWaitMills参数。
-//该函数是线程循环检查串口是否有数据并通知回传的等待时间，设置等待时间越长，数据返回量越大，当然数据回调的间隔也会越久，酌情配置。
-//默认等待时间：0 单位：毫秒
-        int result = LSerialPort.INSTANCE.openSerialPort(
-        "/dev/ttysWK0", //串口地址
-        BaudRate.B_9600,//波特率
-        DataBits.EIGHT,//数据位
-        Parity.NONE,//校验位
-        StopBits.ONE,//停止位
-        10L//设置等待时间10ms
-        );
-
-//只读方式打开串口
-        int result = LSerialPort.INSTANCE.openSerialPortReadOnly(
-        "/dev/ttysWK0", //串口地址
-        BaudRate.B_9600,//波特率
-        DataBits.EIGHT,//数据位
-        Parity.NONE,//校验位
-        StopBits.ONE,//停止位
-        10L//设置等待时间10ms
-        );
-
-//只写方式打开串口
-        int result = LSerialPort.INSTANCE.openSerialPortWriteOnly(
-        "/dev/ttysWK0", //串口地址
-        BaudRate.B_9600,//波特率
-        DataBits.EIGHT,//数据位
-        Parity.NONE,//校验位
-        StopBits.ONE//停止位
-        );
+//用client参数打开串口，当返回result == 0 时串口开启成功 
+val result = simpleClient.open()
+if(result == 0){
+    //串口开启成功... 
+}
 ```
-### 发送一条数据
-```Java
-//打开串口后发送数据
-byte[] msg = new byte[]{(byte) 0xFF, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05, (byte) 0xFE};
-        int result = LSerialPort.INSTANCE.sendMsg("/dev/ttysWK0", msg);
 
-//可以在子线程内发送数据，发送线程以及队列由C++部分维护，无需关心线程同步问题
-        new Thread(() -> {
-        byte[] msg = new byte[]{(byte) 0xFF, (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0xFE};
-        int result = LSerialPort.INSTANCE.sendMsg("/dev/ttysWK0", msg);
-        }).start();
+### 发送数据
+```kotlin
+val data = byteArrayOf(0xFF.toByte(),0x00.toByte(),0x01.toByte(),0x02.toByte(),0x03.toByte(),0x04.toByte(),0x05.toByte(),0x06.toByte(),0xFE.toByte())
+
+//阻塞式 发送一条数据
+client.write(data)
 ```
-### 设置监听器
-```Java
-//打开串口后设置监听器 返回数据为byteArray
-//注意！ 如果进行多次设置，每次会覆盖掉前一个监听器。
-int result = LSerialPort.INSTANCE.setOnLSerialPortListener("/dev/ttysWK0", data -> {
-        Log.d("LSerialPort", "接收到数据长度：" + data.length);
-        });
+
+### 接收数据
+```kotlin
+//阻塞式 读数据，阻塞时长根据初始化设置的超时时间决定
+val data = client.read()
+Log.d("LSerialPortSyncClientExample", "接收到数据，数据大小：${data.size}")
 ```
+
+### 检查串口是否有数据可读取
+```kotlin
+//检查串口是否有数据回传
+val dataAvailable = client.dataAvailable()
+Log.d("LSerialPortSyncClientExample", "串口是否有数据可接收：${dataAvailable}")
+```
+
 ### 关闭串口
-```Java
-//调用时该函数会阻塞等待C++线程退出，需要一定耗时
-int result = LSerialPort.INSTANCE.closeSerialPort("/dev/ttysWK0");
+```kotlin
+//关闭串口根据返回result判断是否关闭成功，当result == 0 关闭成功
+val result = client.close() 
+if(result == 0){
+  //串口关闭成功... 
+}
 ```
+<br><br>
 
-### 判断串口是否已经打开
-```Java
-//使用该函数判断串口是否已经打开
-boolean isOpened = LSerialPort.INSTANCE.hasOpen("/dev/ttysWK0");
-        Log.d("LSerialPort", "串口/dev/ttysWK0是否已打开：" + isOpened);
-```
-<br>
-
-## 工程开发环境信息
+# 工程开发环境信息
 NDK ：23.1.7779620 <br>
 C++ ：17 <br>
 Android Gradle Plugin ：7.4.1<br>
 Gradle ：7.5 <br>
 Android Studio ：Android Studio Electric Eel | 2022.1.1 Patch 1
 <br><br>
-## 编译工程生成AAR
+# 编译工程生成AAR
 1. 导入工程配置后选择Android Studio 中的build -> Refresh Linked C++ Projects 等待Gradle build完成。<br>
    <img width="340" alt="63f048d3450c8e4f3a9e3f12ffdf325" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9f77cbdfb78648deb638b2387dc2e484~tplv-k3u1fbpfcp-watermark.image?">
 
@@ -610,9 +469,9 @@ void interrupte() override {
 ReadWriteWorker::~ReadWriteWorker() {
     LOGE("---finishing worker---");
     ReadWriteWorker::interrupte();
-    LOGE("wait for checkAvailable thread end");
-    if ((_checkAvailableThread != nullptr) && _checkAvailableThread->joinable()) {
-        _checkAvailableThread->join();//等待检查线程结束
+    LOGE("wait for checkAvaliable thread end");
+    if ((_checkAvaliableThread != nullptr) && _checkAvaliableThread->joinable()) {
+        _checkAvaliableThread->join();//等待检查线程结束
     }
     LOGE("wait for write thread end");
     if ((_writeThread != nullptr) && _writeThread->joinable()) {
@@ -628,10 +487,10 @@ ReadWriteWorker::~ReadWriteWorker() {
        _mMsgQueue.pop();
     }
     LOGE("cleaning thread ptr");
-    delete _checkAvailableThread;
+    delete _checkAvaliableThread;
     delete _writeThread;
     delete _readThread;
-    _checkAvailableThread = nullptr;
+    _checkAvaliableThread = nullptr;
     _writeThread = nullptr;
     _readThread = nullptr;
     LOGE("cleaning listener ptr");
