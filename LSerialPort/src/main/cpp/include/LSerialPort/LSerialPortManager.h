@@ -120,7 +120,7 @@ namespace LSerialPort {
          * @param msg 二进制消息
          * @return
          */
-        int sendMessage(const std::string &path, const std::vector<uint8_t> &msg);
+        void sendMessage(const std::string &path, const std::vector<uint8_t> &msg);
 
         /**
          * 设置串口数据监听器
@@ -128,12 +128,30 @@ namespace LSerialPort {
          * @param listener 监听器
          * @return
          */
-        int setLSerialPortDataListener(const std::string &path, jobject *listener);
+        void setLSerialPortDataListener(const std::string &path, jobject *listener);
 
+        /**
+         * 同步线程读方法，仅限SyncReadWriteWorker操作
+         * @param path
+         * @param msg
+         * @return
+         */
+        void writeMessageSync(const std::string &path, const std::vector<uint8_t> &msg);
 
-        int writeMessageSync(const std::string &path, const std::vector<uint8_t> &msg);
-
+        /**
+         * 同步线程写方法，仅限SyncReadWriteWorker操作
+         * @param path
+         * @return
+         */
         std::vector<uint8_t> readMessageSync(const std::string &path);
+
+
+        /**
+         * 同步线程检查是否有数据，仅限SyncReadWriteWorker操作
+         * @param path 串口地址
+         * @return true 有数据 false 无数据
+         */
+        bool dataAvaliableSync(const std::string &path);
 
     private:
         //已加载的串口设备

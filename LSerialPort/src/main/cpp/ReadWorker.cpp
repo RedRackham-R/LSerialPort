@@ -46,7 +46,6 @@ namespace LSerialPort {
             //这里设置毫秒等待时间
             std::this_thread::sleep_for(std::chrono::milliseconds(_checkIntervalWaitMills));
         }
-        LOGE("check available Loop is interrupted!");
     }
 
 
@@ -103,7 +102,6 @@ namespace LSerialPort {
         }
         //退出当前线程
         LSerialPortManager::jvm->DetachCurrentThread();
-        LOGE("read loop is interrupted!");
     }
 
 
@@ -121,26 +119,25 @@ namespace LSerialPort {
 
 
     ReadWorker::~ReadWorker() {
-        LOGE("---finishing worker---");
+        //标记线程结束
         ReadWorker::interrupte();
-        LOGE("wait for checkAvaliable thread end");
+
+        //等待检查线程结束
         if ((_checkAvaliableThread != nullptr) && _checkAvaliableThread->joinable()) {
-            _checkAvaliableThread->join();//等待检查线程结束
+            _checkAvaliableThread->join();
         }
 
-        LOGE("wait for read thread end");
+        //等待读线程结束
         if ((_readThread != nullptr) && _readThread->joinable()) {
-            _readThread->join();//等待读线程结束
+            _readThread->join();
         }
 
-
-        LOGE("cleaning thread ptr");
+        //回收线程监听器内存对象 清理指针
         delete _checkAvaliableThread;
         delete _readThread;
         _checkAvaliableThread = nullptr;
         _readThread = nullptr;
 
-        LOGE("cleaning listener ptr");
         if (_prepListener != nullptr) {
             delete _prepListener;
             _prepListener = nullptr;
@@ -151,15 +148,13 @@ namespace LSerialPort {
             _curlistener = nullptr;
         }
 
-        LOGE("close SerialPort");
+        //关闭串口
         if (_serialPort != nullptr) {
-            LOGE("closing...");
             _serialPort->Close();
             delete _serialPort;
             _serialPort = nullptr;
-            LOGE("close done!");
         }
-        LOGE("finish done!");
+        LOGE("serialport closed");
     }
 
 }

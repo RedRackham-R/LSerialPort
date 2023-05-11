@@ -44,16 +44,20 @@ namespace LSerialPort {
         return msg_vec;
     }
 
+
+    bool SyncReadWriteWorker::dataAvaliable() {
+        return (_serialPort->Available() > 0);
+    }
+
+
     SyncReadWriteWorker::~SyncReadWriteWorker() {
-        LOGE("close SerialPort");
+        //关闭串口
         if (_serialPort != nullptr) {
-            LOGE("closing...");
             _serialPort->Close();
             delete _serialPort;
             _serialPort = nullptr;
-            LOGE("close done!");
         }
-        LOGE("finish done!");
+        LOGE("serialport closed");
     }
 
 

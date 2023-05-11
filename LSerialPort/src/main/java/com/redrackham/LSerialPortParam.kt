@@ -3,6 +3,12 @@ package com.redrackham
 import androidx.annotation.IntDef
 
 
+/**
+ * 多线程客户端类型
+ * READ_WRITE: 读写
+ * ONLY_READ: 只读
+ * ONLY_WRITE：只写
+ */
 @Retention(AnnotationRetention.SOURCE)
 @IntDef(
     MutiThreadClientType.READ_WRITE,
@@ -12,9 +18,9 @@ import androidx.annotation.IntDef
 
 annotation class MutiThreadClientType {
     companion object {
-        const val READ_WRITE = 0
-        const val ONLY_READ = 1
-        const val ONLY_WRITE = 2
+        const val READ_WRITE = 0 //读写
+        const val ONLY_READ = 1//只读
+        const val ONLY_WRITE = 2//只写
     }
 }
 
@@ -71,7 +77,7 @@ annotation class BaudRate {
 
 
 /**
- * 数据位
+ * 数据位 5,6,7,8
  */
 @Retention(AnnotationRetention.SOURCE)
 @IntDef(
@@ -91,7 +97,7 @@ annotation class DataBits {
 
 
 /**
- * 校验位
+ * 校验位 NONE:无  EVEN:偶校验 ODD:奇校验
  */
 @Retention(AnnotationRetention.SOURCE)
 @IntDef(
@@ -109,7 +115,7 @@ annotation class Parity {
 
 
 /**
- * 停止位
+ * 停止位 1,2
  */
 @Retention(AnnotationRetention.SOURCE)
 @IntDef(

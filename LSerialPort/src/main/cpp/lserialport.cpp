@@ -27,7 +27,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     return JNI_VERSION_1_6;
 }
 
-
 extern "C"
 JNIEXPORT jint JNICALL
 Java_com_redrackham_LSerialPortJNI_native_1openSerialPortSync(JNIEnv *env, jobject thiz,
@@ -35,7 +34,6 @@ Java_com_redrackham_LSerialPortJNI_native_1openSerialPortSync(JNIEnv *env, jobje
                                                               jint data_bits, jint parity,
                                                               jint stop_bits,
                                                               jint read_timeout_mills) {
-
     const char *path_char = env->GetStringUTFChars(path, nullptr);
     auto path_str = std::string(path_char);
     BaudRate br = convertBaudRate(baudrate);
@@ -49,9 +47,6 @@ Java_com_redrackham_LSerialPortJNI_native_1openSerialPortSync(JNIEnv *env, jobje
     env->ReleaseStringUTFChars(path, path_char);
     return result;
 }
-
-
-
 
 extern "C"
 JNIEXPORT jint JNICALL
@@ -130,22 +125,22 @@ Java_com_redrackham_LSerialPortJNI_native_1openSerialPort(JNIEnv *env, jobject t
 
 
 extern "C"
-JNIEXPORT jint JNICALL
+JNIEXPORT void JNICALL
 Java_com_redrackham_LSerialPortJNI_native_1sendMsg(JNIEnv *env, jobject thiz, jstring path,
                                                    jbyteArray msg) {
     if (msg == nullptr) {
-        return -1;
+        return;
     }
     const char *path_char = env->GetStringUTFChars(path, nullptr);
     std::vector<uint8_t> msg_vec = convertJByteArrayToVectorU8(env, msg);
-    int result = mLSerialPortManager->sendMessage(path_char, msg_vec);
+    mLSerialPortManager->sendMessage(path_char, msg_vec);
     //释放资源
     env->ReleaseStringUTFChars(path, path_char);
-    return result;
+
 }
 
 extern "C"
-JNIEXPORT jint JNICALL
+JNIEXPORT void JNICALL
 Java_com_redrackham_LSerialPortJNI_native_1setLSerialPortDataListener(JNIEnv *env, jobject thiz,
                                                                       jstring path,
                                                                       jobject listener) {
@@ -153,10 +148,10 @@ Java_com_redrackham_LSerialPortJNI_native_1setLSerialPortDataListener(JNIEnv *en
     auto path_str = std::string(path_char);
 
     jobject jListener = env->NewGlobalRef(listener);
-    int result = mLSerialPortManager->setLSerialPortDataListener(path_str, &jListener);
+    mLSerialPortManager->setLSerialPortDataListener(path_str, &jListener);
     //释放资源
     env->ReleaseStringUTFChars(path, path_char);
-    return result;
+
 }
 
 extern "C"
@@ -180,25 +175,27 @@ Java_com_redrackham_LSerialPortJNI_native_1hasOpen(JNIEnv *env, jobject thiz, js
     bool result = mLSerialPortManager->hasDevice(path_str);
     //释放资源
     env->ReleaseStringUTFChars(path, path_char);
-
     return result;
 }
+
+
+
 
 
 extern "C"
-JNIEXPORT jint JNICALL
+JNIEXPORT void JNICALL
 Java_com_redrackham_LSerialPortJNI_native_1syncWrite(JNIEnv *env, jobject thiz, jstring path,
-                                                     jbyteArray msg) {
-    if (msg == nullptr) {
-        return -1;
+                                                     jbyteArray data) {
+    if (data == nullptr) {
+        return;
     }
     const char *path_char = env->GetStringUTFChars(path, nullptr);
-    std::vector<uint8_t> msg_vec = convertJByteArrayToVectorU8(env, msg);
-    int result = mLSerialPortManager->writeMessageSync(path_char, msg_vec);
+    std::vector<uint8_t> msg_vec = convertJByteArrayToVectorU8(env, data);
+    mLSerialPortManager->writeMessageSync(path_char, msg_vec);
     //释放资源
     env->ReleaseStringUTFChars(path, path_char);
-    return result;
 }
+
 extern "C"
 JNIEXPORT jbyteArray JNICALL
 Java_com_redrackham_LSerialPortJNI_native_1syncRead(JNIEnv *env, jobject thiz, jstring path) {
@@ -235,4 +232,17 @@ Java_com_redrackham_LSerialPortJNI_native_1syncRead(JNIEnv *env, jobject thiz, j
     // 释放资源
     env->ReleaseStringUTFChars(path, path_char);
     return jData;
+}
+
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_redrackham_LSerialPortJNI_native_1syncDataAvaliable(JNIEnv *env, jobject thiz,
+                                                             jstring path) {
+    const char *path_char = env->GetStringUTFChars(path, nullptr);
+    auto path_str = std::string(path_char);
+    bool result = mLSerialPortManager->dataAvaliableSync(path_str);
+    // 释放资源
+    env->ReleaseStringUTFChars(path, path_char);
+    return result;
 }

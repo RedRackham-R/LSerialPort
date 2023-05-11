@@ -51,8 +51,14 @@ namespace LSerialPort {
          * @return
          */
         std::vector<uint8_t> read();
-
+        
         bool isOpened() override;
+
+        /**
+         * 检查是否有数据
+         * @return
+         */
+        bool dataAvaliable();
 
     private:
         //串口对象

@@ -57,7 +57,6 @@ namespace LSerialPort {
             //这里设置毫秒等待时间
             std::this_thread::sleep_for(std::chrono::milliseconds(_checkIntervalWaitMills));
         }
-        LOGE("check available Loop is interrupted!");
     }
 
 
@@ -114,14 +113,12 @@ namespace LSerialPort {
         }
         //退出当前线程
         LSerialPortManager::jvm->DetachCurrentThread();
-        LOGE("read loop is interrupted!");
     }
 
     //写循环
     void ReadWriteWorker::writeLoop() {
         // 等待直至 main() 发送数据
         std::unique_lock<std::mutex> lk(_mWriteMutex);
-        LOGE("start write loop");
         while (!isInterrupted()) {
             //这里等待需要传入当前对象指针，传this会复制当前对象指针而&只会获得当前对象指针引用，
             //如果在lambda表达式中修改了this内容会使得修改无效，一般建议用地址符&
@@ -133,7 +130,6 @@ namespace LSerialPort {
             _serialPort->WriteBinary(msg);
             _mMsgQueue.pop();
         }
-        LOGE("write loop is interrupted!");
     }
 
     bool ReadWriteWorker::isOpened() {
@@ -150,28 +146,30 @@ namespace LSerialPort {
 
 
     ReadWriteWorker::~ReadWriteWorker() {
-        LOGE("---finishing worker---");
+        //标记线程结束
         ReadWriteWorker::interrupte();
-        LOGE("wait for checkAvaliable thread end");
+
+        //等待检查线程结束
         if ((_checkAvaliableThread != nullptr) && _checkAvaliableThread->joinable()) {
-            _checkAvaliableThread->join();//等待检查线程结束
-        }
-        LOGE("wait for write thread end");
-        if ((_writeThread != nullptr) && _writeThread->joinable()) {
-            _writeThread->join();//等待写线程结束
-        }
-        LOGE("wait for read thread end");
-        if ((_readThread != nullptr) && _readThread->joinable()) {
-            _readThread->join();//等待读线程结束
+            _checkAvaliableThread->join();
         }
 
-        LOGE("cleaning msgQueue");
+        //等待写线程结束
+        if ((_writeThread != nullptr) && _writeThread->joinable()) {
+            _writeThread->join();
+        }
+
+        //等待读线程结束
+        if ((_readThread != nullptr) && _readThread->joinable()) {
+            _readThread->join();
+        }
+
         // 清空队列
         while (!_mMsgQueue.empty()) {
             _mMsgQueue.pop();
         }
-        LOGE("cleaning thread ptr");
 
+        //回收线程监听器内存对象 清理指针
         delete _checkAvaliableThread;
         delete _writeThread;
         delete _readThread;
@@ -179,7 +177,6 @@ namespace LSerialPort {
         _writeThread = nullptr;
         _readThread = nullptr;
 
-        LOGE("cleaning listener ptr");
         if (_prepListener != nullptr) {
             delete _prepListener;
             _prepListener = nullptr;
@@ -189,16 +186,13 @@ namespace LSerialPort {
             delete _curlistener;
             _curlistener = nullptr;
         }
-
-        LOGE("close SerialPort");
+        //关闭串口
         if (_serialPort != nullptr) {
-            LOGE("closing...");
             _serialPort->Close();
             delete _serialPort;
             _serialPort = nullptr;
-            LOGE("close done!");
         }
-        LOGE("finish done!");
+        LOGE("serialport closed");
     }
 
 

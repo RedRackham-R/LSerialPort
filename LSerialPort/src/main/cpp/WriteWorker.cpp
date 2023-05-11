@@ -46,7 +46,6 @@ namespace LSerialPort {
             _serialPort->WriteBinary(msg);
             _mMsgQueue.pop();
         }
-        LOGE("write loop is interrupted!");
     }
 
 
@@ -56,31 +55,29 @@ namespace LSerialPort {
 
 
     WriteWorker::~WriteWorker() {
-        LOGE("---finishing worker---");
+        //标记线程结束
         WriteWorker::interrupte();
-        LOGE("wait for write thread end");
+
+        //等待检查线程结束
         if ((_writeThread != nullptr) && _writeThread->joinable()) {
             _writeThread->join();//等待写线程结束
         }
-        LOGE("cleaning msgQueue");
+
         // 清空队列
         while (!_mMsgQueue.empty()) {
             _mMsgQueue.pop();
         }
-        LOGE("cleaning thread ptr");
+
+        //回收内存对象 清理指针
         delete _writeThread;
         _writeThread = nullptr;
 
-        LOGE("close SerialPort");
+        //关闭串口
         if (_serialPort != nullptr) {
-            LOGE("closing...");
             _serialPort->Close();
             delete _serialPort;
             _serialPort = nullptr;
-            LOGE("close done!");
         }
-        LOGE("finish done!");
+        LOGE("serialport closed");
     }
-
-
 }

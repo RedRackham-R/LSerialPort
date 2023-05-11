@@ -6,19 +6,17 @@ object LSerialPortJNI {
         System.loadLibrary("lserialport")
     }
 
-
     external fun native_hasOpen(path: String): Boolean
 
-
-    external fun native_sendMsg(path: String, msg: ByteArray): Int
-
+    external fun native_sendMsg(path: String, msg: ByteArray?)
 
     external fun native_setLSerialPortDataListener(
         path: String, listener: LSerialPortDataListener
-    ): Int
+    )
 
+    external fun native_syncDataAvaliable(path: String): Boolean
 
-    external fun native_syncWrite(path: String, msg: ByteArray): Int
+    external fun native_syncWrite(path: String, data: ByteArray?)
 
     external fun native_syncRead(path: String): ByteArray
 
@@ -57,7 +55,6 @@ object LSerialPortJNI {
         stopBits: Int,
         checkIntervalWaitMills: Int
     ): Int
-
 
     external fun native_closeSerialPort(
         path: String,

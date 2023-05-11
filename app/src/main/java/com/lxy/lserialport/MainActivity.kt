@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
                 //停止位
                 val stopBits = binding.spStopbits.selectedItem as Int
 
-                //这里判断下 避免创建多个client对象
+                //这里判断下 避免创建多个client对象 底层其实还是调用一个对象的函数，不推荐多个对象同时操作同一个串口，。
                 if (lSerialPortClient?.hasOpen() == true) {
                     showLogOnMain("打开串口失败，请先关闭当前运行串口【${lSerialPortClient!!.path}】!!!")
                     return@setOnClickListener
@@ -151,7 +151,6 @@ class MainActivity : AppCompatActivity() {
                     //打开成功设置监听器
                     lSerialPortClient!!.setListener { msg ->
                         showLogOnMain("收 <<< ${msg.toHexString()}")
-                        lSerialPortClient!!.sendMsg(msg)
                     }
                 } else {
                     showLogOnMain("打开串口${path}失败！")
@@ -187,12 +186,7 @@ class MainActivity : AppCompatActivity() {
                 val path = binding.spPath.selectedItem as String
                 val msgStr = binding.edtMsg.text.toString().trim()
                 val msgHex = msgStr.hexToByteArray()
-                val result = lSerialPortClient?.sendMsg(msgHex)
-                if (result == 0) {
-                    showLogOnMain("发 >>> $msgStr")
-                } else {
-                    showLogOnMain("发送失败：${msgStr}")
-                }
+                lSerialPortClient?.sendMsg(msgHex)
             }
         }
 
