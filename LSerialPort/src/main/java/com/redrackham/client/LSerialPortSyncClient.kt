@@ -56,24 +56,24 @@ class LSerialPortSyncClient private constructor(
     /**
      * 写数据
      */
-    fun write(data: ByteArray?)= LSerialPortJNI.native_syncWrite(path, data)
+    fun write(data: ByteArray?) = LSerialPortJNI.native_syncWrite(path, data)
 
     class Builder constructor(val path: String) {
-        private var baudrate: Int? = DEF_BAUDRATE
-        private var dataBits: Int? = DEF_DATABITS
-        private var parity: Int? = DEF_PARITY
-        private var stopBits: Int? = DEF_STOPBITS
-        private var readTimeoutMills: Int? = DEF_READ_TIME_OUT
+        private var baudrate: Int = DEF_BAUDRATE
+        private var dataBits: Int = DEF_DATABITS
+        private var parity: Int = DEF_PARITY
+        private var stopBits: Int = DEF_STOPBITS
+        private var readTimeoutMills: Int = DEF_READ_TIME_OUT
 
-        fun baudrate(@BaudRate baudrate: Int?) = apply { this.baudrate = baudrate }
-        fun dataBits(@DataBits dataBits: Int?) = apply { this.dataBits = dataBits }
-        fun parity(@Parity parity: Int?) = apply { this.parity = parity }
-        fun stopBits(@StopBits stopBits: Int?) = apply { this.stopBits = stopBits }
-        fun readTimeoutMills(readTimeoutMills: Int?) =
+        fun baudrate(@BaudRate baudrate: Int) = apply { this.baudrate = baudrate }
+        fun dataBits(@DataBits dataBits: Int) = apply { this.dataBits = dataBits }
+        fun parity(@Parity parity: Int) = apply { this.parity = parity }
+        fun stopBits(@StopBits stopBits: Int) = apply { this.stopBits = stopBits }
+        fun readTimeoutMills(readTimeoutMills: Int) =
             apply { this.readTimeoutMills = readTimeoutMills }
 
         fun build() = LSerialPortSyncClient(
-            path, baudrate!!, dataBits!!, parity!!, stopBits!!, readTimeoutMills!!
+            path, baudrate, dataBits, parity, stopBits, readTimeoutMills
         )
     }
 }

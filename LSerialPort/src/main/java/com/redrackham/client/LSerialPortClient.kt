@@ -78,32 +78,31 @@ class LSerialPortClient private constructor(
 
 
     class Builder constructor(val path: String) {
+        private var baudrate: Int = DEF_BAUDRATE
+        private var dataBits: Int = DEF_DATABITS
+        private var parity: Int = DEF_PARITY
+        private var stopBits: Int = DEF_STOPBITS
+        private var checkIntervalWaitMills: Int = DEF_CHECK_INTERVAL_WAIT_MILLS
+        private var clientType: Int = DEF_CLIENT_TYPE
 
-        private var baudrate: Int? = DEF_BAUDRATE
-        private var dataBits: Int? = DEF_DATABITS
-        private var parity: Int? = DEF_PARITY
-        private var stopBits: Int? = DEF_STOPBITS
-        private var checkIntervalWaitMills: Int? = DEF_CHECK_INTERVAL_WAIT_MILLS
-        private var clientType: Int? = DEF_CLIENT_TYPE
-
-        fun baudrate(@BaudRate baudrate: Int?) = apply { this.baudrate = baudrate }
-        fun dataBits(@DataBits dataBits: Int?) = apply { this.dataBits = dataBits }
-        fun parity(@Parity parity: Int?) = apply { this.parity = parity }
-        fun stopBits(@StopBits stopBits: Int?) = apply { this.stopBits = stopBits }
-        fun clientType(@MutiThreadClientType clientType: Int?) =
+        fun baudrate(@BaudRate baudrate: Int) = apply { this.baudrate = baudrate }
+        fun dataBits(@DataBits dataBits: Int) = apply { this.dataBits = dataBits }
+        fun parity(@Parity parity: Int) = apply { this.parity = parity }
+        fun stopBits(@StopBits stopBits: Int) = apply { this.stopBits = stopBits }
+        fun clientType(@MutiThreadClientType clientType: Int) =
             apply { this.clientType = clientType }
 
-        fun checkIntervalWaitMills(checkIntervalWaitMills: Int?) =
+        fun checkIntervalWaitMills(checkIntervalWaitMills: Int) =
             apply { this.checkIntervalWaitMills = checkIntervalWaitMills }
 
         fun build() = LSerialPortClient(
             path,
-            baudrate!!,
-            dataBits!!,
-            parity!!,
-            stopBits!!,
-            checkIntervalWaitMills!!,
-            clientType!!
+            baudrate,
+            dataBits,
+            parity,
+            stopBits,
+            checkIntervalWaitMills,
+            clientType
         )
     }
 }

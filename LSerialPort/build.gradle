@@ -6,7 +6,7 @@ plugins {
     //添加signing
     id 'signing'
 }
-var mVersionName = "2.0.0"
+var mVersionName = "2.0.1"
 var mVersionCode = 200
 android {
     signingConfigs {
