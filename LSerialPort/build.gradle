@@ -6,7 +6,7 @@ plugins {
     //添加signing
     id 'signing'
 }
-var mVersionName = "2.0.0-beta"
+var mVersionName = "2.0.0"
 var mVersionCode = 200
 android {
     signingConfigs {
@@ -128,7 +128,10 @@ afterEvaluate {
                 groupId = PUBLISH_GROUP_ID
                 artifactId = "LSerialPort"
                 version = mVersionName + "-debug"
+
+                //上传aar以及源码
                 artifact("$buildDir/outputs/aar/${project.getName()}-${mVersionName}-debug.aar")
+                artifact androidSourcesJar
                 pom {
                     //项目名 （任意填）
                     name.value("LSerialPort")
@@ -159,6 +162,17 @@ afterEvaluate {
                         //工程url地址
                         url.value("https://github.com/RedRackham-R/LSerialPort")
                     }
+
+                    //将项目的依赖关系添加到POM文件，这样通过maven调用可以看到依赖项的groupId，artifactId以及version
+                    withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        project.configurations.implementation.allDependencies.each {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                        }
+                    }
                 }
             }
         }
@@ -186,6 +200,17 @@ gradle.taskGraph.whenReady {
     }
 }
 
+//使用密钥对进行签名
 signing {
     sign(publishing.publications)
+}
+
+
+//添加源码打包
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.source
+
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
 }
