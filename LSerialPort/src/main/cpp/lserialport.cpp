@@ -237,11 +237,11 @@ Java_com_redrackham_LSerialPortJNI_native_1syncRead(JNIEnv *env, jobject thiz, j
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_redrackham_LSerialPortJNI_native_1syncDataAvaliable(JNIEnv *env, jobject thiz,
+Java_com_redrackham_LSerialPortJNI_native_1syncDataAvailable(JNIEnv *env, jobject thiz,
                                                              jstring path) {
     const char *path_char = env->GetStringUTFChars(path, nullptr);
     auto path_str = std::string(path_char);
-    bool result = mLSerialPortManager->dataAvaliableSync(path_str);
+    bool result = mLSerialPortManager->dataAvailableSync(path_str);
     // 释放资源
     env->ReleaseStringUTFChars(path, path_char);
     return result;

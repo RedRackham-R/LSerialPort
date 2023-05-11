@@ -45,7 +45,7 @@ namespace LSerialPort {
     }
 
 
-    bool SyncReadWriteWorker::dataAvaliable() {
+    bool SyncReadWriteWorker::dataAvailable() {
         return (_serialPort->Available() > 0);
     }
 

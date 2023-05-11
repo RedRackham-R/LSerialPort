@@ -610,9 +610,9 @@ void interrupte() override {
 ReadWriteWorker::~ReadWriteWorker() {
     LOGE("---finishing worker---");
     ReadWriteWorker::interrupte();
-    LOGE("wait for checkAvaliable thread end");
-    if ((_checkAvaliableThread != nullptr) && _checkAvaliableThread->joinable()) {
-        _checkAvaliableThread->join();//等待检查线程结束
+    LOGE("wait for checkAvailable thread end");
+    if ((_checkAvailableThread != nullptr) && _checkAvailableThread->joinable()) {
+        _checkAvailableThread->join();//等待检查线程结束
     }
     LOGE("wait for write thread end");
     if ((_writeThread != nullptr) && _writeThread->joinable()) {
@@ -628,10 +628,10 @@ ReadWriteWorker::~ReadWriteWorker() {
        _mMsgQueue.pop();
     }
     LOGE("cleaning thread ptr");
-    delete _checkAvaliableThread;
+    delete _checkAvailableThread;
     delete _writeThread;
     delete _readThread;
-    _checkAvaliableThread = nullptr;
+    _checkAvailableThread = nullptr;
     _writeThread = nullptr;
     _readThread = nullptr;
     LOGE("cleaning listener ptr");

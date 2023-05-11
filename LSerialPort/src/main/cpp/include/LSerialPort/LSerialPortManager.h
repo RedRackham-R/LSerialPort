@@ -151,7 +151,7 @@ namespace LSerialPort {
          * @param path 串口地址
          * @return true 有数据 false 无数据
          */
-        bool dataAvaliableSync(const std::string &path);
+        bool dataAvailableSync(const std::string &path);
 
     private:
         //已加载的串口设备

@@ -14,7 +14,7 @@ object LSerialPortJNI {
         path: String, listener: LSerialPortDataListener
     )
 
-    external fun native_syncDataAvaliable(path: String): Boolean
+    external fun native_syncDataAvailable(path: String): Boolean
 
     external fun native_syncWrite(path: String, data: ByteArray?)
 

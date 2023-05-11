@@ -81,7 +81,7 @@ namespace LSerialPort {
         //读线程
         std::thread *_readThread = nullptr;
         //检查数据是否可见
-        std::thread *_checkAvaliableThread = nullptr;
+        std::thread *_checkAvailableThread = nullptr;
         //当前消息回调
         LSerialPortDataListener *_curlistener = nullptr;
         //预备消息回调

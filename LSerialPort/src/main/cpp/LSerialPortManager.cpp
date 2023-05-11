@@ -306,13 +306,13 @@ namespace LSerialPort {
         }
     }
 
-    bool LSerialPortManager::dataAvaliableSync(const std::string &path) {
+    bool LSerialPortManager::dataAvailableSync(const std::string &path) {
         if (hasDevice(path)) {
             IWorker *worker = _mDevices[path].get();
             //尝试动态转换为ReadWriteWorker
             auto *syncRWWroker = dynamic_cast<SyncReadWriteWorker *>(worker);
             if (syncRWWroker != nullptr) {
-                return syncRWWroker->dataAvaliable();
+                return syncRWWroker->dataAvailable();
             } else {
                 THROW_EXCEPT(
                         "unable to check data available, because the serial port is currently being read and written by asynchronous thread.please use the [addSyncReadWriteDevice] function to open the serial port");

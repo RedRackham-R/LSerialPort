@@ -58,7 +58,7 @@ namespace LSerialPort {
          * 检查是否有数据
          * @return
          */
-        bool dataAvaliable();
+        bool dataAvailable();
 
     private:
         //串口对象

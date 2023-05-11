@@ -46,7 +46,7 @@ class LSerialPortSyncClient private constructor(
     /**
      * 是否有接收到串口数据
      */
-    fun dataAvaliavle(): Boolean = LSerialPortJNI.native_syncDataAvaliable(path)
+    fun dataAvailable(): Boolean = LSerialPortJNI.native_syncDataAvailable(path)
 
     /**
      * 读数据

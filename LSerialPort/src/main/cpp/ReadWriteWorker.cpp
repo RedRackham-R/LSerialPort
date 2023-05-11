@@ -29,7 +29,7 @@ namespace LSerialPort {
             //读线程
             _readThread = new std::thread(&ReadWriteWorker::readLoop, this);
             //检查读数据线程
-            _checkAvaliableThread = new std::thread(&ReadWriteWorker::checkAvailableLoop, this);
+            _checkAvailableThread = new std::thread(&ReadWriteWorker::checkAvailableLoop, this);
 
         } else {
             LOGE("serial port open fail!");
@@ -150,8 +150,8 @@ namespace LSerialPort {
         ReadWriteWorker::interrupte();
 
         //等待检查线程结束
-        if ((_checkAvaliableThread != nullptr) && _checkAvaliableThread->joinable()) {
-            _checkAvaliableThread->join();
+        if ((_checkAvailableThread != nullptr) && _checkAvailableThread->joinable()) {
+            _checkAvailableThread->join();
         }
 
         //等待写线程结束
@@ -170,10 +170,10 @@ namespace LSerialPort {
         }
 
         //回收线程监听器内存对象 清理指针
-        delete _checkAvaliableThread;
+        delete _checkAvailableThread;
         delete _writeThread;
         delete _readThread;
-        _checkAvaliableThread = nullptr;
+        _checkAvailableThread = nullptr;
         _writeThread = nullptr;
         _readThread = nullptr;
 
